@@ -31,14 +31,6 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name):
         # Tentativa de criar o tópico
         result = admin_client.create_topics([new_topic])
 
-        default_configurations = {
-            'retention.ms': '7200000',  
-            'max.message.bytes': '1048576'
-        }
-
-        config_resource = ConfigResource(ConfigResource.Type.TOPIC, normalized_kafka_topic_name, configs=default_configurations)
-        admin_client.incremental_alter_configs([config_resource])
-
         # Verificação do resultado
         for topic, future in result.items():
             try:
@@ -51,6 +43,22 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name):
     except KafkaException as e:
         print(f"Erro ao tentar verificar ou criar o tópico: {e}")
         return 1
+    
+def set_default_config(admin_client, topic_name, config_dicts):
+
+    try:
+        # Criação de objetos ConfigEntry para cada configuração a ser definida
+        config_entries = [ConfigEntry(name=name, value=str(value), incremental_operation=AlterConfigOpType['SET'])
+                        for name, value in config_dicts.items()]
+        
+        # Criação de ConfigResource com a lista de configurações
+        resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)        
+        result_dict = admin_client.incremental_alter_configs([resource])
+        result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
+    except KafkaException as e:
+        print(f"Erro ao tentar definir as configurações: {e}")
+        raise
+
 def main():
     # Configura o parser de argumentos
     parser = argparse.ArgumentParser(description='Cria e normaliza um nome de tópico do Kafka.')
@@ -67,12 +75,18 @@ def main():
     date_type = args.date_type
     date_name = args.date_name
 
+    config_dicts = {
+        'retention.ms': 10,
+        'cleanup.policy': 'compact'
+    }
     # Configuração do cliente Kafka
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    exit_code = create_kafka_topic(admin_client, normalized_kafka_topic_name)
-    sys.exit(exit_code)
+    create_kafka_topic = create_kafka_topic(admin_client, normalized_kafka_topic_name)
+    set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+    sys.exit(create_kafka_topic)
+    
 
 if __name__ == "__main__":
     main()
