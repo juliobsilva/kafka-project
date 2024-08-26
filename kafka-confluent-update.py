@@ -21,13 +21,12 @@ def get_config(admin_client, topic_name, config_name):
 def set_config(admin_client, topic_name, config_dicts):
 
     try:
-        # Create ConfigEntry objects for each config to set
+        # Criação de objetos ConfigEntry para cada configuração a ser definida
         config_entries = [ConfigEntry(name=name, value=str(value), incremental_operation=AlterConfigOpType['SET'])
                         for name, value in config_dicts.items()]
         
-        # Create ConfigResource with the list of configurations
-        resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)
-        
+        # Criação de ConfigResource com a lista de configurações
+        resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)        
         result_dict = admin_client.incremental_alter_configs([resource])
         result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
     except KafkaException as e:

@@ -53,10 +53,10 @@ def main():
 
     args = parser.parse_args()
 
-    # Recebe os parâmetros da linha de comando
-    
+    # Configuração do cliente Kafka
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
-    
+
+    # Recebe os parâmetros da linha de comando  
     domain = args.domain
     environment = args.environment
     date_type = args.date_type
