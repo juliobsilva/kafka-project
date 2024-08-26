@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  kafka-confluent-update:
+  kafka-topic-update:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
