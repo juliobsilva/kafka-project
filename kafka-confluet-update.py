@@ -31,7 +31,7 @@ def set_config(admin_client, topic_name, config_dicts):
         result_dict = admin_client.incremental_alter_configs([resource])
         result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
     except KafkaException as e:
-        print(f"Erro ao tentar definir a configuração: {e}")
+        print(f"Erro ao tentar definir as configurações: {e}")
         raise
 
 def main():
@@ -59,7 +59,7 @@ def main():
         # Verifica se as propriedades de configuração foram atualizadas
         for config_name in config_dicts.keys():
             new_value = get_config(admin_client, topic_name, config_name)
-            print(f'Now {config_name} for topic {topic_name} is {new_value}')
+            #print(f'Now {config_name} for topic {topic_name} is {new_value}')
 
         sys.exit(0)
     except KafkaException as e:
