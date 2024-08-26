@@ -1,4 +1,5 @@
 import argparse
+import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType
 from confluent_kafka.error import KafkaException
 
@@ -12,7 +13,7 @@ def get_config(admin_client, topic_name, config_name):
             config_property = config_entries[config_name]
             return config_property.value
         else:
-            raise ValueError(f"Configuration {config_name} not found for topic {topic_name}")
+            raise ValueError(f"Configuration {config_name} not found for topic {topic_name}")    
     except KafkaException as e:
         print(f"Error while trying to get the configuration: {e}")
         raise
@@ -59,8 +60,17 @@ def main():
         for config_name in config_dicts.keys():
             new_value = get_config(admin_client, topic_name, config_name)
             print(f'Now {config_name} for topic {topic_name} is {new_value}')
+
+        sys.exit(0)
+    except KafkaException as e:
+        print(f"Kafka error occurred: {e}")
+        sys.exit(1)
+    except ValueError as e:
+        print(f"Value error occurred: {e}")
+        sys.exit(1)
     except Exception as e:
-        print(f"Error while trying to update the topic configuration: {e}")
+        print(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
