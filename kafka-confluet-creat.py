@@ -16,11 +16,11 @@ def topic_name_normalized(domain, environment, date_type, date_name):
     
     return normalized_kafka_topic_name
 
-def create_kafka_topic(normalized_kafka_topic_name):
-    # Configuração do cliente AdminClient
-    admin_client = AdminClient({
-        'bootstrap.servers': '13.92.98.80:9092'
-    })
+def create_kafka_topic(admin_client, normalized_kafka_topic_name):
+    # # Configuração do cliente AdminClient
+    # admin_client = AdminClient({
+    #     'bootstrap.servers': '13.92.98.80:9092'
+    # })
 
     # Definição do novo tópico
     new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=1)
@@ -59,6 +59,7 @@ def main():
 
     # Recebe os parâmetros da linha de comando
     
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
     
     domain = args.domain
     environment = args.environment
@@ -66,7 +67,7 @@ def main():
     date_name = args.date_name
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    exit_code = create_kafka_topic(normalized_kafka_topic_name)
+    exit_code = create_kafka_topic(admin_client, normalized_kafka_topic_name)
     sys.exit(exit_code)
 
 if __name__ == "__main__":
