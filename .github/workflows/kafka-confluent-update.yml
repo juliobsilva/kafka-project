@@ -23,6 +23,6 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install confluent-kafka
 
-      - name: Kafka Confluent Topic Update
+      - name: Kafka Topic Update
         run: |
             python3 /$GITHUB_WORKSPACE/kafka-confluent-update.py j-d-p-r
