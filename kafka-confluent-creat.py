@@ -76,8 +76,8 @@ def main():
     date_name = args.date_name
 
     config_dicts = {
-        'retention.ms': 10,
-        'cleanup.policy': 'compact'
+        'retention.ms': '7200000',  
+        'max.message.bytes': '1048576'
     }
     # Configuração do cliente Kafka
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
