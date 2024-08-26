@@ -1,7 +1,7 @@
 import argparse
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType
-from confluent_kafka.error import KafkaException
+from confluent_kafka.error import KafkaException, KafkaError
 
 def get_config(admin_client, topic_name, config_name):
     
@@ -31,7 +31,10 @@ def set_config(admin_client, topic_name, config_dicts):
         result_dict = admin_client.incremental_alter_configs([resource])
         result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
     except KafkaException as e:
-        print(f"Error while trying to set the configuration: {e}")
+        if e.args and e.args[0].code() == KafkaError._UNKNOWN_TOPIC_OR_PART:
+            print(f"Error: The topic '{topic_name}' does not exist.")
+        else:
+            print(f"Error while trying to set the configuration: {e}")
         raise
 
 def main():
