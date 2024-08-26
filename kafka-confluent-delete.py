@@ -28,8 +28,9 @@ def main():
         parser.error('O parâmetro "topic_name" é obrigatório.')
     
     # Chama a função para deletar o tópico
-    exit_code = delete_topic(admin_client, topic_name)
-    sys.exit(exit_code)
+    delete_topic(admin_client, topic_name)
+    # exit_code = delete_topic(admin_client, topic_name)
+    # sys.exit(exit_code)
 
 if __name__ == '__main__':
     main()
