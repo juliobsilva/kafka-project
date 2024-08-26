@@ -51,16 +51,16 @@ def main():
     parser.add_argument('date_type', type=str, help='Tipo do dado')
     parser.add_argument('date_name', type=str, help='Nome do dado')
 
-    args = parser.parse_args()
-
-    # Configuração do cliente Kafka
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
+    args = parser.parse_args()    
 
     # Recebe os parâmetros da linha de comando  
     domain = args.domain
     environment = args.environment
     date_type = args.date_type
     date_name = args.date_name
+
+    # Configuração do cliente Kafka
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
     exit_code = create_kafka_topic(admin_client, normalized_kafka_topic_name)
