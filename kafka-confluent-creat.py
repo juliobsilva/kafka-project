@@ -83,10 +83,12 @@ def main():
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    create_kafka_topic = create_kafka_topic(admin_client, normalized_kafka_topic_name)
-    set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-    sys.exit(create_kafka_topic)
-    
+    create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
+
+    if create_result == 0:    
+        set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+
+    sys.exit(create_result )
 
 if __name__ == "__main__":
     main()
