@@ -1,4 +1,4 @@
-name: Kafka Confluent Topic Create
+name: Kafka Topic Create
 
 on:
   push:

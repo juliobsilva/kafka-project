@@ -17,10 +17,6 @@ def topic_name_normalized(domain, environment, date_type, date_name):
     return normalized_kafka_topic_name
 
 def create_kafka_topic(admin_client, normalized_kafka_topic_name):
-    # # Configuração do cliente AdminClient
-    # admin_client = AdminClient({
-    #     'bootstrap.servers': '13.92.98.80:9092'
-    # })
 
     # Definição do novo tópico
     new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=1)
@@ -38,7 +34,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name):
         # Verificação do resultado
         for topic, future in result.items():
             try:
-                future.result()  # O resultado em si é None
+                future.result() 
                 print(f"Tópico '{topic}' criado com sucesso.")
             except KafkaException as e:
                 print(f"Falha ao criar o tópico '{topic}': {e}")
