@@ -1,7 +1,7 @@
 import argparse
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType
-from confluent_kafka.error import KafkaException, KafkaError
+from confluent_kafka.error import KafkaException
 
 def get_config(admin_client, topic_name, config_name):
     
@@ -13,9 +13,9 @@ def get_config(admin_client, topic_name, config_name):
             config_property = config_entries[config_name]
             return config_property.value
         else:
-            raise ValueError(f"Configuration {config_name} not found for topic {topic_name}")    
+            raise ValueError(f"Configuração não foi aplicada. Tópico, {config_name} não encontrado")    
     except KafkaException as e:
-        print(f"Error while trying to get the configuration: {e}")
+        print(f"Erro ao tentar obter a configuração: {e}")
         raise
     
 def set_config(admin_client, topic_name, config_dicts):
@@ -31,10 +31,7 @@ def set_config(admin_client, topic_name, config_dicts):
         result_dict = admin_client.incremental_alter_configs([resource])
         result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
     except KafkaException as e:
-        if e.args and e.args[0].code() == KafkaError._UNKNOWN_TOPIC_OR_PART:
-            print(f"Kafka error occurred: The topic '{topic_name}' does not exist.")
-        else:
-            print(f"Kafka error occurred: {e}")
+        print(f"Erro ao tentar definir a configuração: {e}")
         raise
 
 def main():
