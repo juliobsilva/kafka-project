@@ -25,4 +25,4 @@ jobs:
 
       - name: Kafka Topic Delete
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluent-delete.py j-d-g-r
+            python3 /$GITHUB_WORKSPACE/kafka-confluent-delete.py b-r-a-s
