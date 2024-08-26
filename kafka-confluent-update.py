@@ -48,8 +48,7 @@ def main():
     
     # Define configurações para serem aplicadas
     config_dicts = {
-        'retention.ms': 10,
-        'cleanup.policy': 'compact'
+        'retention.ms': '1048576',
     }
     try:
         # Define múltiplas configurações
