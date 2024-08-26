@@ -1,3 +1,4 @@
+import argparse
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType
 
 def get_config(topic_name, config_name):
@@ -22,22 +23,33 @@ def set_config(topic_name, config_dicts):
     resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)
     
     result_dict = admin_client.incremental_alter_configs([resource])
-    result_dict[resource].result()
-
-if __name__ == '__main__':
-    topic_name = 'j-d-g-r'
+    result_dict[resource].result()    
+  
+    # Set multiple configurations
+    set_config(topic_name, config_dicts) 
     
+def main():
+    # Configura o parser de argumentos
+    parser = argparse.ArgumentParser(description='Atualiza a configuração de um tópico do Kafka.')
+    parser.add_argument('topic_name', type=str, help='Nome do tópico')
+
+    args = parser.parse_args()
+
+    # Recebe os parâmetros da linha de comando
+    topic_name = args.topic_name
+
     # Define configurations to be set
     config_dicts = {
         'retention.ms': 10,
-        'cleanup.policy': 'compact'
-    }
+        'cleanup.policy': 'compact'    }
     
     # Set multiple configurations
     set_config(topic_name, config_dicts)
-    
+
     # Check if the config property has been updated
     for config_name in config_dicts.keys():
         new_value = get_config(topic_name, config_name)
         print(f'Now {config_name} for topic {topic_name} is {new_value}')
 
+if __name__ == '__main__':
+    main()
