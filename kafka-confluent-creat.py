@@ -1,6 +1,6 @@
 import argparse
 import sys
-from confluent_kafka.admin import AdminClient, NewTopic
+from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
 from confluent_kafka.error import KafkaException
 
 
@@ -30,6 +30,14 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name):
 
         # Tentativa de criar o tópico
         result = admin_client.create_topics([new_topic])
+
+        default_configurations = {
+            'retention.ms': '7200000',  
+            'max.message.bytes': '1048576'
+        }
+
+        config_resource = ConfigResource(ConfigResource.Type.TOPIC, normalized_kafka_topic_name, configs=default_configurations)
+        admin_client.incremental_alter_configs([config_resource])
 
         # Verificação do resultado
         for topic, future in result.items():
