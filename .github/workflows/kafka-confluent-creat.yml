@@ -1,4 +1,4 @@
-name: Kafka Topic Delete
+name: Kafka Topic Create
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  kafka-confluent-delete:
+  kafka-confluent-create:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
@@ -25,4 +25,4 @@ jobs:
 
       - name: Kafka Topic Create
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluet-delete.py julio cesar barbosa silva
+            python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py julio cesar barbosa silva
