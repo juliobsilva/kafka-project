@@ -32,7 +32,7 @@ def main():
     topic_name = args.topic_name
     
     # Configuração do cliente Kafka
-    admin_client = admin_client({'bootstrap.servers': '13.92.98.80:9092'})
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
     
     # Define configurações para serem aplicadas
     config_dicts = {
