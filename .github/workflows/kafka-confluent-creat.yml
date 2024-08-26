@@ -5,6 +5,38 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      CRUD-OPERATION:
+        description: 'Operação CRUD a ser realizada no tópico Kafka'
+        type: choice
+        required: true
+        options:
+        - CREATE      
+        - UPDATE
+        - DELETE      
+      DOMAIN:
+        description: 'Domínio (Ex: Transacionar)'
+        required: true
+      ENVIRONMENT:
+        description: 'Ambiente (TU, TI, TH, PR)'
+        type: choice  
+        required: true
+        options:
+        - TU
+        - TI
+        - TH
+        - PR
+      DATA-TYPE:
+        description: 'Tipo de dado'
+        type: choice
+        required: true
+        options:
+        - Log
+        - Etl
+        - Cdc
+      DATA-NAME:
+        description: 'Nome do dado'
+        required: true
     
 jobs:
   kafka-topic-create:
@@ -25,4 +57,8 @@ jobs:
 
       - name: Kafka Topic Create
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py b r a s
+            python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \
+            ${{ github.event.inputs.DOMAIN }} \
+            ${{ github.event.inputs.ENVIRONMENT }} \
+            ${{ github.event.inputs.DATA-TYPE }} \
+            ${{ github.event.inputs.DATA-NAME }}

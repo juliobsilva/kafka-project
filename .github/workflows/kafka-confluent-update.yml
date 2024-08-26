@@ -5,6 +5,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      TOPIC-NAME:
+        description: 'Nome do tópico Kafka'
+        required: true
     
 jobs:
   kafka-topic-update:
@@ -25,4 +29,4 @@ jobs:
 
       - name: Kafka Topic Update
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluent-update.py b-r-a-s
+            python3 /$GITHUB_WORKSPACE/kafka-confluent-update.py ${{ github.event.inputs.TOPIC-NAME }}
