@@ -1,29 +1,12 @@
 import sys
 import argparse
 from confluent_kafka.admin import AdminClient
-from confluent_kafka.error import KafkaException
 
 def delete_topic(admin_client, topic_name):
-    try:
-        # Verifica se o tópico já existe
-        metadata = admin_client.list_topics(timeout=10)
-        if topic_name not in metadata.topics:
-            print(f'O tópico "{topic_name}" não existe.')
-            return 1
-        
-        # Deletar o tópico
+    try:        
         admin_client.delete_topics([topic_name])
-        
-        # # Aguarde a conclusão da deleção
-        # for topic, future in futures.items():
-        #     try:
-        #         future.result()  # Bloqueia até a deleção ser concluída
-        #         print(f'Tópico "{topic}" deletado com sucesso.')
-        #     except KafkaException as e:
-        #         print(f'Erro ao deletar o tópico "{topic}": {e}')
-        #         return 1
-        
-        return 0
+        print(f'Tópico "{topic_name}" deletado com sucesso.')
+        return
     except Exception as e:
         print(f'Erro ao deletar o tópico: {e}')
         return 1
