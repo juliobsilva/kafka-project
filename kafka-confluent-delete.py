@@ -12,16 +12,16 @@ def delete_topic(admin_client, topic_name):
             return 1
         
         # Deletar o tópico
-        futures = admin_client.delete_topics([topic_name])
+        admin_client.delete_topics([topic_name])
         
-        # Aguarde a conclusão da deleção
-        for topic, future in futures.items():
-            try:
-                future.result()  # Bloqueia até a deleção ser concluída
-                print(f'Tópico "{topic}" deletado com sucesso.')
-            except KafkaException as e:
-                print(f'Erro ao deletar o tópico "{topic}": {e}')
-                return 1
+        # # Aguarde a conclusão da deleção
+        # for topic, future in futures.items():
+        #     try:
+        #         future.result()  # Bloqueia até a deleção ser concluída
+        #         print(f'Tópico "{topic}" deletado com sucesso.')
+        #     except KafkaException as e:
+        #         print(f'Erro ao deletar o tópico "{topic}": {e}')
+        #         return 1
         
         return 0
     except Exception as e:
