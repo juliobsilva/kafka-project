@@ -7,7 +7,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
     user_name = user_name
 
     # Definindo ACL para um tópico específico
-    acl = AclBinding (
+    acl_read = AclBinding (
         restype=ResourceType.TOPIC,
         name='{topic_name}',
         resource_pattern_type=None,  # Pode deixar como None ou configurar conforme necessário
@@ -17,9 +17,8 @@ def set_permission_topic(admin_client, topic_name, user_name):
         permission_type=AclPermissionType.ALLOW
     )
 
-
     # Cria as ACLs no Kafka
-    futures = admin_client.create_acls([acl_read, acl_write])
+    futures = admin_client.create_acls([acl_read])
 
     # Verifica se as ACLs foram criadas com sucesso
     for acl, future in futures.items():
