@@ -42,8 +42,8 @@ def main():
                                 'bootstrap.servers': '13.92.98.80:9092',
                                 'sasl.mechanisms': 'PLAIN',  # Ou outro mecanismo configurado
                                 'security.protocol': 'SASL_PLAINTEXT',  # Ou outro protocolo configurado
-                                'sasl.username': 'kafka',
-                                'sasl.password': 'jlo.2012'
+                                'sasl.username': 'admin',
+                                'sasl.password': 'admin-password'
                               })
 
     # Chama a função para conceder permissões
