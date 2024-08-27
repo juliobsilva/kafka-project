@@ -37,6 +37,9 @@ on:
       DATA-NAME:
         description: 'Nome do dado'
         required: true
+      COST_CENTER:
+        description: 'Centro de custo'
+        required: true
     
 jobs:
   kafka-topic-create:
@@ -61,4 +64,5 @@ jobs:
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
             ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }}
+            ${{ github.event.inputs.DATA-NAME }} \
+            ${{ github.event.inputs.COST_CENTER }}
