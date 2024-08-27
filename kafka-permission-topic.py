@@ -40,8 +40,8 @@ def main():
     # Configuração do cliente AdminClient
     admin_client = AdminClient({
                                 'bootstrap.servers': '13.92.98.80:9092',
-                                'sasl.mechanisms': 'PLAIN',  # Ou outro mecanismo configurado
-                                'security.protocol': 'PLAINTEXT',  # Ou outro protocolo configurado
+                                'sasl.mechanisms': 'SCRAM-SHA-512',  # Ou outro mecanismo configurado
+                                'security.protocol': 'SASL_PLAINTEXT',  # Ou outro protocolo configurado
                                 'sasl.username': 'kafka',
                                 'sasl.password': 'jlo.2012'
                               })
