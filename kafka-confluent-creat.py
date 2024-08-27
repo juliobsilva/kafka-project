@@ -97,6 +97,7 @@ def main():
 
     if create_result == 0:    
         set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+        set_permission_topic(normalized_kafka_user_name)
 
     sys.exit(create_result )
 
