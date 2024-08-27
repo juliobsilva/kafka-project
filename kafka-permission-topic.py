@@ -1,28 +1,22 @@
 import argparse
-from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic, AclBinding,AclBinding, ResourcePattern, AclOperation, AclPermissionType, ResourceType
+from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic, AclBinding,AclBinding, AclOperation, AclPermissionType, ResourceType
 
 def set_permission_topic(admin_client, topic_name, user_name):
     
     topic_name = topic_name
     user_name = user_name
 
-    # Define a permissão de leitura
-    acl_read = AclBinding(
-        ResourcePattern(ResourceType.TOPIC, topic_name, ResourcePattern.ResourcePatternType.LITERAL),
-        user_name,
-        '*',  # Host pode ser especificado conforme necessário
-        AclOperation.READ,
-        AclPermissionType.ALLOW
+    # Definindo ACL para um tópico específico
+    acl = AclBinding (
+        restype=ResourceType.TOPIC,
+        name='{topic_name}',
+        resource_pattern_type=None,  # Pode deixar como None ou configurar conforme necessário
+        principal="User:{user_name}",
+        host="*",
+        operation=AclOperation.READ,  # Ou WRITE, ALL, etc.
+        permission_type=AclPermissionType.ALLOW
     )
 
-    # Define a permissão de escrita
-    acl_write = AclBinding(
-        ResourcePattern(ResourceType.TOPIC, topic_name, ResourcePattern.ResourcePatternType.LITERAL),
-        user_name,
-        '*',  # Host pode ser especificado conforme necessário
-        AclOperation.WRITE,
-        AclPermissionType.ALLOW
-    )
 
     # Cria as ACLs no Kafka
     futures = admin_client.create_acls([acl_read, acl_write])
