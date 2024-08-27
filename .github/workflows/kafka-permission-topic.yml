@@ -9,6 +9,9 @@ on:
       TOPIC-NAME:
         description: 'Nome do tópico Kafka'
         required: true
+      USER_NAME:
+        description: 'Nome do usuário'
+        required: true
     
 jobs:
   kafka-permission-topic:
@@ -29,4 +32,6 @@ jobs:
 
       - name: Kafka Permission Topic
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py ${{ github.event.inputs.TOPIC-NAME }}
+            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py 
+            ${{ github.event.inputs.TOPIC-NAME }} \
+            ${{ github.event.inputs.USER_NAME }}
