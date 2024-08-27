@@ -7,7 +7,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
         restype=ResourceType.TOPIC,
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,  # Pode configurar conforme necessário
-        principal=f"User:{user_name}",
+        principal=user_name,
         host="*",
         operation=AclOperation.READ,  # Ou WRITE, ALL, etc.
         permission_type=AclPermissionType.ALLOW
