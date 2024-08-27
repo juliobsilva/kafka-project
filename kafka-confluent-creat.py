@@ -10,11 +10,11 @@ def topic_name_normalized(domain, environment, date_type, date_name, cost_center
     environment_normalized = environment.lower()
     date_type_normalized = date_type.lower()
     date_name_normalized = date_name.lower()
-    cost_center = cost_center.lower()
+    cost_center_normalized = cost_center.lower()
 
     # Gera o nome do tópico seguindo o template
     normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
-    normalized_kafka_user_name  = f'{cost_center}-{domain}-{environment}'
+    normalized_kafka_user_name  = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}'
     
     return normalized_kafka_topic_name, normalized_kafka_user_name
 
@@ -60,7 +60,7 @@ def set_default_config(admin_client, topic_name, config_dicts):
     except KafkaException as e:
         print(f"Erro ao tentar definir as configurações: {e}")
         raise
-    
+
 def set_permission_topic(normalized_kafka_user_name):
     normalized_kafka_user_name = normalized_kafka_user_name
     
