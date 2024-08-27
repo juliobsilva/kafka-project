@@ -14,9 +14,9 @@ def topic_name_normalized(domain, environment, date_type, date_name, cost_center
 
     # Gera o nome do tópico seguindo o template
     normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
-    #normalized_kafka_user_name  = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}'
+    normalized_kafka_user_name  = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}'
     
-    return normalized_kafka_topic_name
+    return normalized_kafka_topic_name, normalized_kafka_user_name
 
 def create_kafka_topic(admin_client, normalized_kafka_topic_name):
 
@@ -91,7 +91,7 @@ def main():
     # Configuração do cliente Kafka
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
 
-    normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name, cost_center)
+    normalized_kafka_topic_name, normalized_kafka_user_name = topic_name_normalized(domain, environment, date_type, date_name, cost_center)
     create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
 
     if create_result == 0:    
