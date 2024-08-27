@@ -38,7 +38,13 @@ def main():
     user_name = args.user_name
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
+    admin_client = AdminClient({
+                                'bootstrap.servers': '13.92.98.80:9092',
+                                'sasl.mechanisms': 'PLAIN',  # Ou outro mecanismo configurado
+                                'security.protocol': 'SASL_PLAINTEXT',  # Ou outro protocolo configurado
+                                'sasl.username': 'kafka',
+                                'sasl.password': 'jlo.2012'
+                              })
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
