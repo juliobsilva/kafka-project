@@ -16,7 +16,7 @@ def topic_name_normalized(domain, environment, date_type, date_name, cost_center
     normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
     #normalized_kafka_user_name  = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}'
     
-    return normalized_kafka_topic_name, normalized_kafka_user_name
+    return normalized_kafka_topic_name
 
 def create_kafka_topic(admin_client, normalized_kafka_topic_name):
 
