@@ -1,5 +1,5 @@
 import argparse
-from confluent_kafka.admin import AdminClient, AclBinding, ResourcePattern, AclOperation, AclPermissionType, ResourceType
+from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic, AclBinding,AclBinding, ResourcePattern, AclOperation, AclPermissionType, ResourceType
 
 def set_permission_topic(admin_client, topic_name, user_name):
     
