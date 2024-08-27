@@ -1,22 +1,20 @@
 import argparse
 import sys
-from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
+from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic, AclBinding,AclBinding, ResourcePattern, AclOperation, AclPermissionType, ResourceType
 from confluent_kafka.error import KafkaException
 
 
-def topic_name_normalized(domain, environment, date_type, date_name, cost_center):
+def topic_name_normalized(domain, environment, date_type, date_name):
     # Normaliza os valores de entrada
     domain_normalized = domain.lower()
     environment_normalized = environment.lower()
     date_type_normalized = date_type.lower()
     date_name_normalized = date_name.lower()
-    cost_center_normalized = cost_center.lower()
 
     # Gera o nome do tópico seguindo o template
     normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
-    normalized_kafka_user_name  = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}'
     
-    return normalized_kafka_topic_name, normalized_kafka_user_name
+    return normalized_kafka_topic_name
 
 def create_kafka_topic(admin_client, normalized_kafka_topic_name):
 
@@ -59,12 +57,7 @@ def set_default_config(admin_client, topic_name, config_dicts):
         result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
     except KafkaException as e:
         print(f"Erro ao tentar definir as configurações: {e}")
-        raise
-
-def set_permission_topic(normalized_kafka_user_name):
-    normalized_kafka_user_name = normalized_kafka_user_name
-    print(f"Usuário '{normalized_kafka_user_name}' criado com sucesso.")
-    
+        raise    
 
 def main():
     # Configura o parser de argumentos
@@ -73,7 +66,6 @@ def main():
     parser.add_argument('environment', type=str, help='Ambiente')
     parser.add_argument('date_type', type=str, help='Tipo do dado')
     parser.add_argument('date_name', type=str, help='Nome do dado')
-    parser.add_argument('cost_center', type=str, help='Centro de custo')
 
     args = parser.parse_args()    
 
@@ -82,8 +74,6 @@ def main():
     environment = args.environment
     date_type = args.date_type
     date_name = args.date_name
-    cost_center = args.cost_center
-
 
     config_dicts = {
         'retention.ms': '7200000',  
@@ -92,12 +82,11 @@ def main():
     # Configuração do cliente Kafka
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
 
-    normalized_kafka_topic_name, normalized_kafka_user_name = topic_name_normalized(domain, environment, date_type, date_name, cost_center)
+    normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
     create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
 
     if create_result == 0:    
         set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-        set_permission_topic(normalized_kafka_user_name)
 
     sys.exit(create_result )
 
