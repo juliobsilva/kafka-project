@@ -63,6 +63,7 @@ def set_default_config(admin_client, topic_name, config_dicts):
 
 def set_permission_topic(normalized_kafka_user_name):
     normalized_kafka_user_name = normalized_kafka_user_name
+    print(f"Usuário '{normalized_kafka_user_name}' criado com sucesso.")
     
 
 def main():
