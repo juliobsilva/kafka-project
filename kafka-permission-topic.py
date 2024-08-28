@@ -6,10 +6,10 @@ def set_permission_topic(admin_client, topic_name, user_name):
     acl_read = AclBinding(
         restype=ResourceType.TOPIC,
         name=topic_name,
-        resource_pattern_type=ResourcePatternType.LITERAL,  # Pode configurar conforme necessário
+        resource_pattern_type=ResourcePatternType.LITERAL,  
         principal=f"User:{user_name}",
         host="*",
-        operation=AclOperation.READ,  # Ou WRITE, ALL, etc.
+        operation=AclOperation.READ, 
         permission_type=AclPermissionType.ALLOW
     )
 
@@ -40,8 +40,8 @@ def main():
     # Configuração do cliente AdminClient
     admin_client = AdminClient({
                                 'bootstrap.servers': '13.92.98.80:9092',
-                                'sasl.mechanisms': 'PLAIN',  # Ou outro mecanismo configurado
-                                'security.protocol': 'SASL_PLAINTEXT',  # Ou outro protocolo configurado
+                                'sasl.mechanisms': 'PLAIN',  
+                                'security.protocol': 'SASL_PLAINTEXT',  
                                 'sasl.username': 'admin',
                                 'sasl.password': 'admin-password'
                               })
