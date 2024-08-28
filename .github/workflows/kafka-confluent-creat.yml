@@ -37,9 +37,6 @@ on:
       DATA-NAME:
         description: 'Nome do dado'
         required: true
-      COST_CENTER:
-        description: 'Centro de custo'
-        required: true
     
 jobs:
   kafka-topic-create:
