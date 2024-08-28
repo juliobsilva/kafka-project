@@ -80,7 +80,12 @@ def main():
         'max.message.bytes': '1048576'
     }
     # Configuração do cliente Kafka
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})   
+    admin_client = AdminClient({'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
+                                'security.protocol': 'SASL_SSL',
+                                'sasl.mechanisms':'PLAIN',
+                                'sasl.username': 'VWIFLOJGPI33ZBOO',
+                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'
+                            })   
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
     create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
