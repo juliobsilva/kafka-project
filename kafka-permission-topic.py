@@ -7,7 +7,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
         restype=ResourceType.TOPIC,
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,  
-        principal=user_name,
+        principal=f'User:{user_name}',
         host="*",
         operation=AclOperation.READ, 
         permission_type=AclPermissionType.ALLOW
@@ -38,7 +38,7 @@ def main():
     user_name = args.user_name
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092', 'security.protocol': 'PLAINTEXT'})
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
