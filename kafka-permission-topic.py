@@ -38,13 +38,7 @@ def main():
     user_name = args.user_name
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({
-                                'bootstrap.servers': '13.92.98.80:9092',
-                                'sasl.mechanisms': 'PLAIN',  
-                                'security.protocol': 'SASL_PLAINTEXT',  
-                                'sasl.username': 'admin',
-                                'sasl.password': 'admin-password'
-                              })
+    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
