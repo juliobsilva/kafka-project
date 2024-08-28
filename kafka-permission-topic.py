@@ -39,7 +39,7 @@ def main():
 
     # Configuração do cliente AdminClient
     admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092', 
-                                'security.protocol': 'PLAINTEXT',
+                                'security.protocol': 'SASL_PLAINTEXT',
                                 'sasl.mechanisms': 'PLAIN',
                                 'sasl.username': 'admin',
                                 'sasl.password': 'admin-password'
