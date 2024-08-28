@@ -8,7 +8,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,  
         principal=user_name,
-        host='*',
+        host="*",
         operation=AclOperation.READ, 
         permission_type=AclPermissionType.ALLOW
     )
@@ -19,7 +19,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
         for acl, future in futures.items():
             try:
                 future.result()
-                print(f"Permissão {acl.operation} concedida com sucesso para {acl.principal} no tópico {acl.resource_name}")
+                print(f"Permissão {acl.operation} concedida com sucesso para {acl.principal} no tópico {acl.name}")
             except Exception as e:
                 print(f"Falha ao conceder permissão em {acl.operation}: {e}")
     except Exception as e:
