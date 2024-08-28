@@ -8,6 +8,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,  
         principal=user_name,
+        host='*',
         operation=AclOperation.READ, 
         permission_type=AclPermissionType.ALLOW
     )
