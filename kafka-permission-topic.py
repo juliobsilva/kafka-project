@@ -21,7 +21,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
                 future.result()
                 print(f"Permissão {acl.operation} concedida com sucesso para {acl.principal} no tópico {acl.name}")
             except Exception as e:
-                print(f"Falha ao conceder permissão em {acl.principal} {acl.operation}: {e}")
+                print(f"Falha ao conceder permissão em {acl.operation}: {e}")
     except Exception as e:
         print(f"Erro ao criar ACLs: {e}")
 
