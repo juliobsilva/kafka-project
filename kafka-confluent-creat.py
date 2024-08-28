@@ -1,6 +1,6 @@
 import argparse
 import sys
-from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic, AclBinding,AclBinding, ResourcePattern, AclOperation, AclPermissionType, ResourceType
+from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
 from confluent_kafka.error import KafkaException
 
 
