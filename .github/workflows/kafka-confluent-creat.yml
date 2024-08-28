@@ -64,5 +64,4 @@ jobs:
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
             ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \
-            ${{ github.event.inputs.COST_CENTER }}
+            ${{ github.event.inputs.DATA-NAME }} 
