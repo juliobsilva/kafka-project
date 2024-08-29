@@ -26,24 +26,24 @@ def set_permission_topic(admin_client, topic_name, user_name):
         print(f"Erro ao criar ACLs: {e}")
 
 def describe_acls(admin_client, topic_name, user_name):
-    # Lista todas as ACLs do Kafka
+    # Definindo o filtro para descrever ACLs
     acl_filter = AclBinding(
         restype=ResourceType.TOPIC,
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,
         principal=f'User:{user_name}',
         host='*',
-        operation=AclOperation.READ,
-        permission_type=AclPermissionType.ALLOW
+        operation=None,  # Definido como None para buscar todas as operações
+        permission_type=None  # Definido como None para buscar todos os tipos de permissão
     )
 
     try:
-        acls = AdminClient.describe_acls([acl_filter])
-        for acl, future in acls.items():
-            future.result()
-            print(f"ACL: {acl.principal} tem permissão de {acl.operation} no tópico {acl.name}")
+        # Passar o filtro para describe_acls
+        acls = admin_client.describe_acls(acl_filter)
+        for acl in acls:
+            print(f"ACL encontrada: {acl}")
     except Exception as e:
-        print(f"Erro ao listar ACLs: {e}")
+        print(f"Erro ao descrever ACLs: {e}")
 
 
 def main():
