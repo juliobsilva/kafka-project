@@ -27,7 +27,7 @@ def set_permission_topic(admin_client, topic_name, user_name):
 
 def check_acl(admin_client, topic_name, user_name):
     # Definindo o filtro para descrever ACLs
-    acl_filter = AclBindingFilter(
+    acl_filter = AclBinding(
         restype=ResourceType.TOPIC,
         name=topic_name,
         resource_pattern_type=ResourcePatternType.LITERAL,
