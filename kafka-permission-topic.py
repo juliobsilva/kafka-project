@@ -41,13 +41,10 @@ def main():
 
     # Recebe os parâmetros da linha de comando
     topic_name = args.topic_name
-    user_name = args.user_name
-   
-
-    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
-    #kafka_credentials_env = json.loads(credentials)
+    user_name = args.user_name    
 
     # Configuração do cliente AdminClient
+    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
 
     # Chama a função para conceder permissões
