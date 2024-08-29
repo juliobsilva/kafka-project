@@ -38,11 +38,11 @@ def main():
     user_name = args.user_name
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092', 
-                                'security.protocol': 'SASL_PLAINTEXT',
-                                'sasl.mechanisms': 'PLAIN',
-                                'sasl.username': 'admin',
-                                'sasl.password': 'admin-password'
+    admin_client = AdminClient({'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
+                                'security.protocol': 'SASL_SSL',
+                                'sasl.mechanisms':'PLAIN',
+                                'sasl.username': 'VWIFLOJGPI33ZBOO',
+                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'
                                 })
 
     # Chama a função para conceder permissões
