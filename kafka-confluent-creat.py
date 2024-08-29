@@ -73,8 +73,8 @@ def main():
     parser = argparse.ArgumentParser(description='Cria e normaliza um nome de tópico do Kafka.')
     parser.add_argument('domain', type=str, help='Dominio')
     parser.add_argument('environment', type=str, help='Ambiente')
-    parser.add_argument('date_type', type=str, help='Tipo do dado')
-    parser.add_argument('date_name', type=str, help='Nome do dado')
+    parser.add_argument('--date_type', type=str, help='Tipo do dado')
+    parser.add_argument('--date_name', type=str, help='Nome do dado')
 
     # Parâmetros adicionais
     parser.add_argument('--retention_ms', type=str, help='Tempo de retenção')
