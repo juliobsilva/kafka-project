@@ -44,7 +44,7 @@ def main():
     user_name = args.user_name
    
 
-    kafka_credentials = os.getenv('KAFKA_CREDENTIALS')
+    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     #kafka_credentials_env = json.loads(credentials)
 
     # Configuração do cliente AdminClient
