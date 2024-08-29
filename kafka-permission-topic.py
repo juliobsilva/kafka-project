@@ -3,6 +3,9 @@ from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPerm
 
 def set_permission_topic(admin_client, topic_name, user_name):
     # Definindo ACL para um tópico específico
+    topic_name = topic_name
+    user_name = user_name
+    admin_client = admin_client
     acl_read = AclBinding(
         restype=ResourceType.TOPIC,
         name=topic_name,
