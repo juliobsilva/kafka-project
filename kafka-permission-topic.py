@@ -1,24 +1,6 @@
 import argparse
 from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPermissionType, ResourceType, ResourcePatternType, AclBindingFilter
 
-
-
-def user_exists(admin_client, topic_name, user_name):
-    # Verifica se há alguma ACL existente para o usuário no tópico
-    try:
-        acls = AdminClient.describe_acls(
-            resource_type=ResourceType.TOPIC,
-            resource_name=topic_name,
-            principal=f'User:{user_name}'
-        )
-        for acl in acls:
-            if acl.principal == f'User:{user_name}' and acl.resource_name == topic_name:
-                return True
-        return False
-    except Exception as e:
-        print(f"Erro ao listar ACLs: {e}")
-        return False
-
 def set_permission_topic(admin_client, topic_name, user_name):
     # Definindo ACL para um tópico específico
     acl_read = AclBinding(
@@ -43,6 +25,27 @@ def set_permission_topic(admin_client, topic_name, user_name):
     except Exception as e:
         print(f"Erro ao criar ACLs: {e}")
 
+def describe_acls(admin_client, topic_name, user_name):
+    # Definindo o filtro para descrever ACLs
+    acl_filter = AclBindingFilter(
+        restype=ResourceType.TOPIC,
+        name=topic_name,
+        resource_pattern_type=ResourcePatternType.LITERAL,
+        principal=f'User:{user_name}',
+        host='*',
+        operation=AclOperation.READ,
+        permission_type=AclPermissionType.ALLOW
+    )
+
+    try:
+        # Passar uma lista contendo o filtro para describe_acls
+        acl_filters = [acl_filter]  # Criar uma lista contendo o filtro
+        acls = AdminClient.describe_acls(acl_filters)
+        for acl in acls:
+            print(f"ACL encontrada: {acl}")
+    except Exception as e:
+        print(f"Erro ao descrever ACLs: {e}")
+
 
 def main():
     # Configura o parser de argumentos
@@ -65,9 +68,7 @@ def main():
                                 })
 
     # Chama a função para conceder permissões
-    user_exists(admin_client, topic_name, user_name)
     set_permission_topic(admin_client, topic_name, user_name)
-
-    
+    describe_acls(admin_client, topic_name, user_name)
 if __name__ == "__main__":
     main()
