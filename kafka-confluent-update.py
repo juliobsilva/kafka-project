@@ -54,7 +54,7 @@ def main():
     
     # Define configurações para serem aplicadas
     config_dicts = {
-        'retention.ms': '1048576',
+        'retention.ms': '7200000',
     }
     try:
         # Define múltiplas configurações
