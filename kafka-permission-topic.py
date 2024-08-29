@@ -25,25 +25,6 @@ def set_permission_topic(admin_client, topic_name, user_name):
     except Exception as e:
         print(f"Erro ao criar ACLs: {e}")
 
-def check_acl(admin_client, topic_name, user_name):
-    # Definindo o filtro para descrever ACLs
-    acl_filter = AclBinding(
-        restype=ResourceType.TOPIC,
-        name=topic_name,
-        resource_pattern_type=ResourcePatternType.LITERAL,
-        principal=f'User:{user_name}',
-        host='*',
-        operation=AclOperation.READ,
-        permission_type=AclPermissionType.ALLOW
-    )
-
-    try:
-        # Passar uma lista de filtros para describe_acls
-        acls = admin_client.list_acls([acl_filter])
-        for acl in acls:
-            print(f"ACL encontrada: {acl}")
-    except Exception as e:
-        print(f"Erro ao descrever ACLs: {e}")
 
 def main():
     # Configura o parser de argumentos
@@ -67,7 +48,6 @@ def main():
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
-    check_acl(admin_client, topic_name, user_name)
-
+    
 if __name__ == "__main__":
     main()
