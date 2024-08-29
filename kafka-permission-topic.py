@@ -39,7 +39,7 @@ def check_acl(admin_client, topic_name, user_name):
 
     try:
         # Descreve as ACLs no Kafka
-        acls = admin_client.describe_acls(acl_filter)
+        acls = admin_client.describe_acls([acl_filter])
         for acl in acls:
             print(f"ACL encontrada: {acl}")
     except Exception as e:  
