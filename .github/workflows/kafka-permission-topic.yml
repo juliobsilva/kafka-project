@@ -32,5 +32,5 @@ jobs:
 
       - name: Kafka Permission Topic
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py ${{ github.event.inputs.TOPIC-NAME }} ${{ github.event.inputs.USER_NAME }} ${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} ${{ secrets.KAFKA_API_KEY }} ${{ secrets.KAFKA_API_SECRET }}
+            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py ${{ github.event.inputs.TOPIC-NAME }} ${{ github.event.inputs.USER_NAME }} ${{secrets.KAFKA_CREDENTIALS}}
             
