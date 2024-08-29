@@ -23,6 +23,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
     environment = environment
     num_partitions = num_partitions
     replication_factor = replication_factor
+    
     # Definição do novo tópico
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
