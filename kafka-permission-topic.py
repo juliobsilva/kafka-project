@@ -34,7 +34,7 @@ def main():
     parser = argparse.ArgumentParser(description='Concede permissões de leitura e escrita em um tópico do Kafka.')
     parser.add_argument('topic_name', type=str, help='Nome do tópico')
     parser.add_argument('user_name', type=str, help='Nome do usuário')
-    parser.add_argument('kafka_credentials', type=map, help='Credenciais do Kafka')
+    parser.add_argument('kafka_credentials', type=str, help='Credenciais do Kafka')
 
     args = parser.parse_args()
 
