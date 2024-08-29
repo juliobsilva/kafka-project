@@ -44,7 +44,11 @@ def main():
 
     
     # Configuração do cliente AdminClient
-    admin_client = AdminClient(dict(os.environ.get('KAFKA_CREDENTIALS')))
+    kafka_credentials_str = os.environ.get('KAFKA_CREDENTIALS')
+    if kafka_credentials_str is None:
+        raise Exception('Variável de ambiente KAFKA_CREDENTIALS não definida')
+    kafka_credentials_str = json.loads(kafka_credentials_str)
+    admin_client = AdminClient(kafka_credentials_str)
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
