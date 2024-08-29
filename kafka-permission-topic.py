@@ -1,6 +1,24 @@
 import argparse
 from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPermissionType, ResourceType, ResourcePatternType, AclBindingFilter
 
+
+
+def user_exists(admin_client, topic_name, user_name):
+    # Verifica se há alguma ACL existente para o usuário no tópico
+    try:
+        acls = admin_client.list_acls(
+            resource_type=ResourceType.TOPIC,
+            resource_name=topic_name,
+            principal=f'User:{user_name}'
+        )
+        for acl in acls:
+            if acl.principal == f'User:{user_name}' and acl.resource_name == topic_name:
+                return True
+        return False
+    except Exception as e:
+        print(f"Erro ao listar ACLs: {e}")
+        return False
+
 def set_permission_topic(admin_client, topic_name, user_name):
     # Definindo ACL para um tópico específico
     acl_read = AclBinding(
@@ -47,7 +65,9 @@ def main():
                                 })
 
     # Chama a função para conceder permissões
+    user_exists(admin_client, topic_name, user_name)
     set_permission_topic(admin_client, topic_name, user_name)
+
     
 if __name__ == "__main__":
     main()
