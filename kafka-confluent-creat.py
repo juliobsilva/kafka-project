@@ -68,6 +68,8 @@ def main():
     parser.add_argument('environment', type=str, help='Ambiente')
     parser.add_argument('date_type', type=str, help='Tipo do dado')
     parser.add_argument('date_name', type=str, help='Nome do dado')
+    parser.add_argument('retention_ms', type=str, help='Tempo de retenção')
+    parser.add_argument('cleanup_policy', type=str, help='Política de limpeza')
 
     args = parser.parse_args()    
 
@@ -76,11 +78,18 @@ def main():
     environment = args.environment
     date_type = args.date_type
     date_name = args.date_name
+    retention_ms = args.retention_ms
+    cleanup_policy = args.cleanup_policy
 
     config_dicts = {
-        'retention.ms': '7200000',  
-        'max.message.bytes': '1048576'
+        "retention.ms": "7200000",  
+        "max.message.bytes": "1048576"
     }
+    
+    if environment == "PR":
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["cleanup.policy"] = cleanup_policy
+
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)

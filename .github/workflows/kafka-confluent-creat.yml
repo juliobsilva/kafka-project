@@ -37,7 +37,13 @@ on:
       DATA-NAME:
         description: 'Nome do dado'
         required: true
-    
+      RETENTION:
+        description: 'Tempo de retenção em milissegundos'
+        required: true
+      MAX-MESSAGE-BYTES:
+        description: 'Tamanho máximo da mensagem em bytes'
+        required: true    
+        
 jobs:
   kafka-topic-create:
     env:
