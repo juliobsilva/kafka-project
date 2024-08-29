@@ -18,10 +18,16 @@ def topic_name_normalized(domain, environment, date_type, date_name):
     
     return normalized_kafka_topic_name
 
-def create_kafka_topic(admin_client, normalized_kafka_topic_name):
+def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor):
 
+    environment = environment
+    num_partitions = num_partitions
+    replication_factor = replication_factor
     # Definição do novo tópico
-    new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=3)
+    if environment == "PR":
+        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
+    else:
+        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=3)
 
     try:
         # Verifica se o tópico já existe
@@ -70,6 +76,8 @@ def main():
     parser.add_argument('date_name', type=str, help='Nome do dado')
     parser.add_argument('retention_ms', type=str, help='Tempo de retenção')
     parser.add_argument('cleanup_policy', type=str, help='Política de limpeza')
+    parser.add_argument('num_partitions', type=int, help='Número de partições')
+    parser.add_argument('replication_factor', type=int, help='Fator de replicação')
 
     args = parser.parse_args()    
 
@@ -80,6 +88,8 @@ def main():
     date_name = args.date_name
     retention_ms = args.retention_ms
     cleanup_policy = args.cleanup_policy
+    num_partitions = args.num_partitions
+    replication_factor = args.replication_factor
 
     config_dicts = {
         "retention.ms": "7200000",  
@@ -95,7 +105,7 @@ def main():
     admin_client = AdminClient(kafka_credentials)
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
+    create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
 
     if create_result == 0:    
         set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)

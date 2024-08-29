@@ -5,15 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      CRUD-OPERATION:
-        description: 'Operação CRUD a ser realizada no tópico Kafka'
-        type: choice
-        required: true
-        options:
-        - CREATE      
-        - UPDATE
-        - DELETE      
+    inputs:    
       DOMAIN:
         description: 'Domínio (Ex: Transacionar)'
         required: true
@@ -42,6 +34,12 @@ on:
         required: true
       MAX-MESSAGE-BYTES:
         description: 'Tamanho máximo da mensagem em bytes'
+        required: true
+      NUM-PARTITIONS:
+        description: 'Número de partições'
+        required: true
+      REPLICATION-FACTOR:
+        description: 'Fator de replicação'
         required: true    
 
 jobs:
@@ -71,4 +69,6 @@ jobs:
             ${{ github.event.inputs.DATA-TYPE }} \
             ${{ github.event.inputs.DATA-NAME }} \
             ${{ github.event.inputs.RETENTION }} \
-            ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
+            ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
+            ${{ github.event.inputs.NUM-PARTITIONS }} \
+            ${{ github.event.inputs.REPLICATION-FACTOR }}
