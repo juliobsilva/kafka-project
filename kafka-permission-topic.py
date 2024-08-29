@@ -46,6 +46,7 @@ def main():
     
     # Configuração do cliente AdminClient
     kafka_credentials_str = os.environ.get('KAFKA_CREDENTIALS')
+    print(kafka_credentials_str)
     if kafka_credentials_str is None:
         raise Exception('Variável de ambiente KAFKA_CREDENTIALS não definida')
     kafka_credentials_str = json.loads(kafka_credentials_str)
