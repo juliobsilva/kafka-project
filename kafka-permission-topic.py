@@ -1,5 +1,4 @@
 import os
-import json
 import argparse
 from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPermissionType, ResourceType, ResourcePatternType, AclBindingFilter
 
@@ -36,6 +35,7 @@ def main():
     parser = argparse.ArgumentParser(description='Concede permissões de leitura e escrita em um tópico do Kafka.')
     parser.add_argument('topic_name', type=str, help='Nome do tópico')
     parser.add_argument('user_name', type=str, help='Nome do usuário')
+    
 
     args = parser.parse_args()
 
@@ -43,14 +43,16 @@ def main():
     topic_name = args.topic_name
     user_name = args.user_name
 
-    
+    kafka_credentials = os.getenv('KAFKA_CREDENTIALS')
+    print(f'Kafka credentials: {kafka_credentials}')
+
     # Configuração do cliente AdminClient
-    kafka_credentials_str = os.environ.get('KAFKA_CREDENTIALS')
-    print(kafka_credentials_str)
-    if kafka_credentials_str is None:
-        raise Exception('Variável de ambiente KAFKA_CREDENTIALS não definida')
-    kafka_credentials_str = json.loads(kafka_credentials_str)
-    admin_client = AdminClient(kafka_credentials_str)
+    admin_client = AdminClient({'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
+                                'security.protocol': 'SASL_SSL',
+                                'sasl.mechanisms':'PLAIN',
+                                'sasl.username': 'VWIFLOJGPI33ZBOO',
+                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'
+                                })
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
