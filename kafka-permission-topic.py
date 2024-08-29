@@ -39,8 +39,8 @@ def check_acl(admin_client, topic_name, user_name):
 
     try:
         acls = admin_client.describe_acls(acl_filter)
-        for acl in acls:
-            print(f"ACL encontrada: {acl}")
+        for acl, futures in acls:
+            print(f"ACL encontrada: {acl.operation} {acl.principal} {acl.permission_type} {acl.name}")
     except Exception as e:
         print(f"Erro ao descrever ACLs: {e}")
 
