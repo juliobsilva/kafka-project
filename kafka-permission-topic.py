@@ -44,7 +44,7 @@ def main():
 
     
     # Configuração do cliente AdminClient
-    admin_client = AdminClient(os.environ.get('KAFKA_CREDENTIALS'))
+    admin_client = AdminClient(dict(os.environ.get('KAFKA_CREDENTIALS')))
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
