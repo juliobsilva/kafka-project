@@ -34,20 +34,17 @@ def main():
     parser = argparse.ArgumentParser(description='Concede permissões de leitura e escrita em um tópico do Kafka.')
     parser.add_argument('topic_name', type=str, help='Nome do tópico')
     parser.add_argument('user_name', type=str, help='Nome do usuário')
+    parser.add_argument('kafka_credentials', type=map, help='Credenciais do Kafka')
 
     args = parser.parse_args()
 
     # Recebe os parâmetros da linha de comando
     topic_name = args.topic_name
     user_name = args.user_name
+    kafka_credentials = args.kafka_credentials
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
-                                'security.protocol': 'SASL_SSL',
-                                'sasl.mechanisms':'PLAIN',
-                                'sasl.username': 'VWIFLOJGPI33ZBOO',
-                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'
-                                })
+    admin_client = AdminClient(kafka_credentials)
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
