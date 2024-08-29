@@ -1,4 +1,5 @@
 import os
+import json
 import argparse
 from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPermissionType, ResourceType, ResourcePatternType, AclBindingFilter
 
