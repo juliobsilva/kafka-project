@@ -23,7 +23,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
     environment = environment
     num_partitions = num_partitions
     replication_factor = replication_factor
-    
+
     # Definição do novo tópico
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
@@ -63,7 +63,7 @@ def set_default_config(admin_client, topic_name, config_dicts):
         # Criação de ConfigResource com a lista de configurações
         resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)        
         result_dict = admin_client.incremental_alter_configs([resource])
-        result_dict[resource].result()  # Wait for the result to ensure the configuration is applied
+        result_dict[resource].result()
     except KafkaException as e:
         print(f"Erro ao tentar definir as configurações: {e}")
         raise    
