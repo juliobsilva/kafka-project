@@ -49,7 +49,7 @@ def main():
     print(f'Kafka credentials: {get}')
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({get})
+    admin_client = AdminClient(get)
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
