@@ -63,7 +63,7 @@ jobs:
 
       - name: Kafka Topic Create
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \  
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \  
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
             ${{ github.event.inputs.DATA-TYPE }} \
