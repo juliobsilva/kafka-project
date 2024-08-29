@@ -6,7 +6,7 @@ from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPerm
 def user_exists(admin_client, topic_name, user_name):
     # Verifica se há alguma ACL existente para o usuário no tópico
     try:
-        acls = admin_client.list_acls(
+        acls = AdminClient.describe_acls(
             resource_type=ResourceType.TOPIC,
             resource_name=topic_name,
             principal=f'User:{user_name}'
