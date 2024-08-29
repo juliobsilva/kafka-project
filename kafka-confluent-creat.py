@@ -75,10 +75,12 @@ def main():
     parser.add_argument('environment', type=str, help='Ambiente')
     parser.add_argument('date_type', type=str, help='Tipo do dado')
     parser.add_argument('date_name', type=str, help='Nome do dado')
-    parser.add_argument('retention_ms', type=str, help='Tempo de retenção')
-    parser.add_argument('cleanup_policy', type=str, help='Política de limpeza')
-    parser.add_argument('num_partitions', type=int, help='Número de partições')
-    parser.add_argument('replication_factor', type=int, help='Fator de replicação')
+
+    # Parâmetros adicionais
+    parser.add_argument('--retention_ms', type=str, help='Tempo de retenção')
+    parser.add_argument('--cleanup_policy', type=str, help='Política de limpeza')
+    parser.add_argument('--num_partitions', type=int, help='Número de partições')
+    parser.add_argument('--replication_factor', type=int, help='Fator de replicação')
 
     args = parser.parse_args()    
 
