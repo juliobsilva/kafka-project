@@ -44,7 +44,13 @@ def main():
     topic_name = args.topic_name
     
     # Configuração do cliente Kafka
-    admin_client = AdminClient({'bootstrap.servers': '13.92.98.80:9092'})
+    admin_client = AdminClient({
+                                'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
+                                'security.protocol': 'SASL_SSL',
+                                'sasl.mechanisms':'PLAIN',
+                                'sasl.username': 'VWIFLOJGPI33ZBOO',
+                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'                                
+                                })
     
     # Define configurações para serem aplicadas
     config_dicts = {

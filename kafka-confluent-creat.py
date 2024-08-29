@@ -85,7 +85,7 @@ def main():
                                 'sasl.mechanisms':'PLAIN',
                                 'sasl.username': 'VWIFLOJGPI33ZBOO',
                                 'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'
-                            })   
+                              })   
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
     create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name)
