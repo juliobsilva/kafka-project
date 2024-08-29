@@ -63,12 +63,4 @@ jobs:
 
       - name: Kafka Topic Create
         run: |
-          python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \
-            ${{ github.event.inputs.DOMAIN }} \
-            ${{ github.event.inputs.ENVIRONMENT }} \
-            --date_type ${{ github.event.inputs.DATA_TYPE }} \
-            --date_name ${{ github.event.inputs.DATA_NAME }} \
-            --retention ${{ github.event.inputs.RETENTION }} \
-            --max_message_bytes ${{ github.event.inputs.MAX_MESSAGE_BYTES }} \
-            --num_partitions ${{ github.event.inputs.NUM_PARTITIONS }} \
-            --replication_factor ${{ github.event.inputs.REPLICATION_FACTOR }}
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py ${{ github.event.inputs.DOMAIN }} ${{ github.event.inputs.ENVIRONMENT }} --date_type ${{ github.event.inputs.DATA_TYPE }} --date_name ${{ github.event.inputs.DATA_NAME }} --retention ${{ github.event.inputs.RETENTION }} --max_message_bytes ${{ github.event.inputs.MAX_MESSAGE_BYTES }} --num_partitions ${{ github.event.inputs.NUM_PARTITIONS }} --replication_factor ${{ github.event.inputs.REPLICATION_FACTOR }}
