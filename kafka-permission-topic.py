@@ -38,12 +38,10 @@ def check_acl(admin_client, topic_name, user_name):
     )
 
     try:
-        futures = admin_client.describe_acls(acl_filter)
-        for acl, futures in futures.items():
-            futures.result()
-            print(f"ACL encontrada: {acl.operation} {acl.principal} {acl.permission_type} {acl.name}")
-    except Exception as e:
-        print(f"Erro ao descrever ACLs: {e}")
+        # Descreve as ACLs no Kafka
+        acls = admin_client.describe_acls(acl_filter)
+        for acl in acls:
+            print(f"ACL encontrada: {acl}")
 
 def main():
     # Configura o parser de argumentos
