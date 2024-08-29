@@ -38,6 +38,7 @@ def check_acl(admin_client, topic_name, user_name):
     )
 
     try:
+        # Passar uma lista de filtros para describe_acls
         acls = admin_client.describe_acls([acl_filter])
         for acl in acls:
             print(f"ACL encontrada: {acl}")
