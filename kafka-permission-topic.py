@@ -39,7 +39,7 @@ def describe_acls(admin_client, topic_name, user_name):
 
     try:
         # Passar o filtro para describe_acls
-        acls = admin_client.describe_acls(acl_filter)
+        acls = AdminClient.describe_acls(acl_filter)
         for acl in acls:
             print(f"ACL encontrada: {acl}")
     except Exception as e:
