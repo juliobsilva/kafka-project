@@ -63,6 +63,6 @@ def main():
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
-    
+    describe_acls(admin_client)
 if __name__ == "__main__":
     main()
