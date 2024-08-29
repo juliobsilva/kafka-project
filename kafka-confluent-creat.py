@@ -19,7 +19,7 @@ def topic_name_normalized(domain, environment, date_type, date_name):
 def create_kafka_topic(admin_client, normalized_kafka_topic_name):
 
     # Definição do novo tópico
-    new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=1)
+    new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=3)
 
     try:
         # Verifica se o tópico já existe
