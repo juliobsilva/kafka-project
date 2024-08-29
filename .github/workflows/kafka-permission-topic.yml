@@ -16,7 +16,7 @@ on:
 jobs:
   kafka-permission-topic:
     env:
-      KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
+      KAFKA_CREDENTIALS: 
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
@@ -34,5 +34,5 @@ jobs:
 
       - name: Kafka Permission Topic
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py ${{ github.event.inputs.TOPIC-NAME }} ${{ github.event.inputs.USER_NAME }}
+            python3 /$GITHUB_WORKSPACE/kafka-permission-topic.py ${{ github.event.inputs.TOPIC-NAME }} ${{ github.event.inputs.USER_NAME }} ${{ secrets.KAFKA_CREDENTIALS }}
             

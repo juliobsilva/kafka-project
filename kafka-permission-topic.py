@@ -36,6 +36,7 @@ def main():
     parser = argparse.ArgumentParser(description='Concede permissões de leitura e escrita em um tópico do Kafka.')
     parser.add_argument('topic_name', type=str, help='Nome do tópico')
     parser.add_argument('user_name', type=str, help='Nome do usuário')
+    parser.add_argument('kafka_credentials', type=dict, help='Credenciais do Kafka')
     
 
     args = parser.parse_args()
@@ -43,13 +44,15 @@ def main():
     # Recebe os parâmetros da linha de comando
     topic_name = args.topic_name
     user_name = args.user_name
+    kafka_credentials = args.kafka_credentials
+
 
     kafka_credentials = os.getenv('KAFKA_CREDENTIALS')
     get = json.loads(kafka_credentials)
     print(f'Kafka credentials: {get}')
 
     # Configuração do cliente AdminClient
-    admin_client = AdminClient(get)
+    admin_client = AdminClient(kafka_credentials)
 
     # Chama a função para conceder permissões
     set_permission_topic(admin_client, topic_name, user_name)
