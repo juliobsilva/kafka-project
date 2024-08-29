@@ -1,4 +1,5 @@
 import os
+import json
 import argparse
 from confluent_kafka.admin import AdminClient, AclBinding, AclOperation, AclPermissionType, ResourceType, ResourcePatternType, AclBindingFilter
 
@@ -44,7 +45,8 @@ def main():
     user_name = args.user_name
 
     kafka_credentials = os.getenv('KAFKA_CREDENTIALS')
-    print(f'Kafka credentials: {kafka_credentials}')
+    get = json.loads(kafka_credentials)
+    print(f'Kafka credentials: {get}')
 
     # Configuração do cliente AdminClient
     admin_client = AdminClient({'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
