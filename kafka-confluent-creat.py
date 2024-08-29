@@ -77,8 +77,8 @@ def main():
     parser.add_argument('--date_name', type=str, help='Nome do dado')
 
     # Parâmetros adicionais
-    parser.add_argument('--retention_ms', type=str, help='Tempo de retenção')
-    parser.add_argument('--cleanup_policy', type=str, help='Política de limpeza')
+    parser.add_argument('--retention_ms', type=int, help='Tempo de retenção')
+    parser.add_argument('--max_message_bytes', type=int, help='Política de limpeza')
     parser.add_argument('--num_partitions', type=int, help='Número de partições')
     parser.add_argument('--replication_factor', type=int, help='Fator de replicação')
 
@@ -90,7 +90,7 @@ def main():
     date_type = args.date_type
     date_name = args.date_name
     retention_ms = args.retention_ms
-    cleanup_policy = args.cleanup_policy
+    max_message_bytes = args.max_message_bytes
     num_partitions = args.num_partitions
     replication_factor = args.replication_factor
 
@@ -101,7 +101,7 @@ def main():
     
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
-        config_dicts["max.message.bytes"] = cleanup_policy
+        config_dicts["max.message.bytes"] = max_message_bytes
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
