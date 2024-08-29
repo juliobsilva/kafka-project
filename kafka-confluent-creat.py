@@ -68,8 +68,8 @@ def main():
     parser.add_argument('environment', type=str, help='Ambiente')
     parser.add_argument('date_type', type=str, help='Tipo do dado')
     parser.add_argument('date_name', type=str, help='Nome do dado')
-    parser.add_argument('retention_ms', type=str, help='Tempo de retenção')
-    parser.add_argument('cleanup_policy', type=str, help='Política de limpeza')
+    parser.add_argument('retention_ms', type=int, help='Tempo de retenção')
+    parser.add_argument('cleanup_policy', type=int, help='Política de limpeza')
 
     args = parser.parse_args()    
 
