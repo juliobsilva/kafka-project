@@ -25,6 +25,13 @@ def set_permission_topic(admin_client, topic_name, user_name):
     except Exception as e:
         print(f"Erro ao criar ACLs: {e}")
 
+    try:
+        acls = admin_client.describe_acls(acl_read())
+        for acl in acls:
+            print(f"ACL: {acl}")
+    except Exception as e:
+        print(f"Erro ao listar ACLs: {e}")
+
 
 def main():
     # Configura o parser de argumentos
