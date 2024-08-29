@@ -41,8 +41,9 @@ def describe_acls(admin_client, topic_name, user_name):
         # Passar uma lista contendo o filtro para describe_acls
         acl_filters = [acl_filter]  # Criar uma lista contendo o filtro
         acls = admin_client.describe_acls(acl_filters)
-        for acl in acls:
-            print(f"ACL encontrada: {acl}")
+        for acl, future in acls.items():
+            future.result()
+            print(f"ACL encontrada: {acl.principal} tem permissão de {acl.operation} no tópico {acl.name}")
     except Exception as e:
         print(f"Erro ao descrever ACLs: {e}")
 
