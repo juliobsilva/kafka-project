@@ -100,7 +100,9 @@ def main():
         create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
         if create_result == 0:    
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-            sys.exit(create_result )   
+            sys.exit(create_result ) 
+        else:
+            print("Não ha topico a ser criado")  
 
 if __name__ == "__main__":
     main()
