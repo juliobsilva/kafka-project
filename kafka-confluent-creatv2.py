@@ -79,13 +79,30 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS', '1')
     replication_factor = os.getenv('REPLICATION_FACTOR', '1')
 
+
+    # Imprime os valores para depuração
+    print(f"domain: '{domain}'")
+    print(f"environment: '{environment}'")
+    print(f"date_type: '{date_type}'")
+    print(f"date_name: '{date_name}'")
+    print(f"retention_ms: {retention_ms}")
+    print(f"max_message_bytes: {max_message_bytes}")
+    print(f"num_partitions: {num_partitions}")
+    print(f"replication_factor: {replication_factor}")
+
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
     }
 
     # Configurações específicas para o ambiente de produção
- 
+    if environment == "PR":
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["max.message.bytes"] = max_message_bytes
+        num_partitions = num_partitions
+        replication_factor = replication_factor
+        date_type = date_type
+        date_name = date_name
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
@@ -105,14 +122,7 @@ def main():
                 if param in (None, '', ' '):
                     print(f"O parâmetro {name} não foi informado")
         else:
-            print("Não há tópico a ser criado")
-    if environment == "PR":
-        config_dicts["retention.ms"] = retention_ms
-        config_dicts["max.message.bytes"] = max_message_bytes
-        num_partitions = num_partitions
-        replication_factor = replication_factor
-        date_type = date_type
-        date_name = date_name  
+            print("Não há tópico a ser criado")  
 
 if __name__ == "__main__":
     main()
