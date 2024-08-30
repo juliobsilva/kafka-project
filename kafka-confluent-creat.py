@@ -74,11 +74,11 @@ def main():
     parser.add_argument('domain', type=str, help='Dominio')
     parser.add_argument('environment', type=str, help='Ambiente')
     parser.add_argument('date_type', type=str, help='Tipo do dado')
-    parser.add_argument('date_name', type=str, help='Nome do dado')    
+    parser.add_argument('date_name', type=str, help='Nome do dado')
+    parser.add_argument('retention_ms', type=int, help='Tempo de retenção', default=7200000)
     parser.add_argument('max_message_bytes', type=int, help='Política de limpeza')
     parser.add_argument('num_partitions', type=int, help='Número de partições')
     parser.add_argument('replication_factor', type=int, help='Fator de replicação')
-    parser.add_argument('--retention_ms', type=int, help='Tempo de retenção')
 
     args = parser.parse_args()    
 

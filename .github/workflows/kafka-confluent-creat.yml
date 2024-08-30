@@ -28,7 +28,10 @@ on:
         - Cdc
       DATA-NAME:
         description: 'Nome do dado'
-        required: true      
+        required: true
+      RETENTION:
+        description: 'Tempo de retenção em milissegundos'
+        required: false
       MAX-MESSAGE-BYTES:
         description: 'Tamanho máximo da mensagem em bytes'
         required: true
@@ -37,11 +40,7 @@ on:
         required: true
       REPLICATION-FACTOR:
         description: 'Fator de replicação'
-        required: true
-      RETENTION:
-        description: 'Tempo de retenção em milissegundos'
-        required: false
-        default: 7200000    
+        required: true    
 
 jobs:
   kafka-topic-create:
@@ -68,7 +67,7 @@ jobs:
             ${{ github.event.inputs.ENVIRONMENT }} \
             ${{ github.event.inputs.DATA-TYPE }} \
             ${{ github.event.inputs.DATA-NAME }} \
+            ${{ github.event.inputs.RETENTION }} \
             ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
             ${{ github.event.inputs.NUM-PARTITIONS }} \
-            ${{ github.event.inputs.REPLICATION-FACTOR }} \
-            --retention_ms ${{ github.event.inputs.RETENTION }} \
+            ${{ github.event.inputs.REPLICATION-FACTOR }} 
