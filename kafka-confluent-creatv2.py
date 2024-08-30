@@ -75,10 +75,10 @@ def main():
     environment = str(os.getenv('ENVIRONMENT'))
     date_type = str(os.getenv('DATE_TYPE'))
     date_name = str(os.getenv('DATE_NAME'))
-    retention_ms = int(os.getenv('RETENTION_MS'))if os.getenv('RETENTION_MS') else None
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))if os.getenv('MAX_MESSAGE_BYTES') else None
-    num_partitions = int(os.getenv('NUM_PARTITIONS'))if os.getenv('NUM_PARTITIONS') else None
-    replication_factor = int(os.getenv('REPLICATION_FACTOR'))if os.getenv('REPLICATION_FACTOR') else None
+    retention_ms = int(os.getenv('RETENTION_MS', 1))
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1))
+    num_partitions = int(os.getenv('NUM_PARTITIONS', 1))
+    replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))
 
     config_dicts = {
         "retention.ms": "7200000",  
@@ -97,7 +97,7 @@ def main():
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
 
-    if  normalized_kafka_topic_name is not None:
+    if all(v is not None for v in [domain, environment, date_type, date_name, normalized_kafka_topic_name]):
         create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
 
     if create_result == 0:    
