@@ -66,8 +66,8 @@ jobs:
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
             ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \
-            --retention_ms ${{ github.event.inputs.RETENTION }} \
+            ${{ github.event.inputs.DATA-NAME }} \            
             ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
             ${{ github.event.inputs.NUM-PARTITIONS }} \
-            ${{ github.event.inputs.REPLICATION-FACTOR }}
+            ${{ github.event.inputs.REPLICATION-FACTOR }} \
+            --retention_ms ${{ github.event.inputs.RETENTION }}
