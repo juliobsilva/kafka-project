@@ -102,7 +102,7 @@ def main():
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result ) 
     else:
-        for all in all([domain, environment, date_type, date_name]):
+        for all in [domain, environment, date_type, date_name]:
             if all in (None, ''):
                 print(f"O parametro {all} não foi informado")
     print("Não ha topico a ser criado")  
