@@ -74,10 +74,10 @@ def main():
     environment = str(os.getenv('ENVIRONMENT'))
     date_type = str(os.getenv('DATE_TYPE'))
     date_name = str(os.getenv('DATE_NAME'))
-    retention_ms = int(os.getenv('RETENTION_MS', 1))
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1))
-    num_partitions = int(os.getenv('NUM_PARTITIONS', 1))
-    replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))
+    retention_ms = int(os.getenv('RETENTION_MS')) if os.getenv('RETENTION_MS') else None
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))if os.getenv('MAX_MESSAGE_BYTES') else
+    num_partitions = int(os.getenv('NUM_PARTITIONS', 1))if os.getenv('NUM_PARTITIONS') else None
+    replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))if os.getenv('REPLICATION_FACTOR') else None
 
     config_dicts = {
         "retention.ms": "7200000",  
