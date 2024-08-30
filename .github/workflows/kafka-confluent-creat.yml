@@ -62,11 +62,11 @@ jobs:
           pip install confluent-kafka
       - name: Kafka Topic Create
         run: |
-            python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-create.py \
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
-            ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \            
+            ${{ github.event.inputs.DATA_TYPE }} \
+            ${{ github.event.inputs.DATA_NAME }} \
             --retention_ms ${{ github.event.inputs.RETENTION }} \
             --max_message_bytes ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
             --num_partitions ${{ github.event.inputs.NUM-PARTITIONS }} \
