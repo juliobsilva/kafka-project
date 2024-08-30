@@ -85,13 +85,7 @@ def main():
     }
 
     # Configurações específicas para o ambiente de produção
-    if environment == "PR":
-        config_dicts["retention.ms"] = retention_ms
-        config_dicts["max.message.bytes"] = max_message_bytes
-        num_partitions = num_partitions
-        replication_factor = replication_factor
-        date_type = date_type
-        date_name = date_name
+ 
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
@@ -111,7 +105,14 @@ def main():
                 if param in (None, '', ' '):
                     print(f"O parâmetro {name} não foi informado")
         else:
-            print("Não há tópico a ser criado")  
+            print("Não há tópico a ser criado")
+    if environment == "PR":
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["max.message.bytes"] = max_message_bytes
+        num_partitions = num_partitions
+        replication_factor = replication_factor
+        date_type = date_type
+        date_name = date_name  
 
 if __name__ == "__main__":
     main()
