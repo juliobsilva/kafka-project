@@ -97,10 +97,10 @@ def main():
 
     # Configurações específicas para o ambiente de produção
     if environment == "PR":
-        config_dicts["retention.ms"] = retention_ms
-        config_dicts["max.message.bytes"] = max_message_bytes
-        num_partitions = num_partitions
-        replication_factor = replication_factor
+        config_dicts["retention.ms"] = int(retention_ms)
+        config_dicts["max.message.bytes"] = int(max_message_bytes)
+        num_partitions = int(num_partitions)
+        replication_factor = int(replication_factor)
         date_type = date_type
         date_name = date_name
 
