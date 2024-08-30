@@ -96,7 +96,9 @@ def main():
     admin_client = AdminClient(kafka_credentials)
 
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
+
+    if  normalized_kafka_topic_name is not None:
+        create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
 
     if create_result == 0:    
         set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
