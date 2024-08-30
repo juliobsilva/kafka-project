@@ -75,7 +75,7 @@ def main():
     date_type = str(os.getenv('DATE_TYPE'))
     date_name = str(os.getenv('DATE_NAME'))
     retention_ms = int(os.getenv('RETENTION_MS')) if os.getenv('RETENTION_MS') else None
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))if os.getenv('MAX_MESSAGE_BYTES') else
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))if os.getenv('MAX_MESSAGE_BYTES') else None
     num_partitions = int(os.getenv('NUM_PARTITIONS', 1))if os.getenv('NUM_PARTITIONS') else None
     replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))if os.getenv('REPLICATION_FACTOR') else None
 
