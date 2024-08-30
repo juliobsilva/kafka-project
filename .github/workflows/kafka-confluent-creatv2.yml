@@ -47,8 +47,8 @@ jobs:
     env:
       DOMAIN: ${{ github.event.inputs.DOMAIN }}
       ENVIRONMENT: ${{ github.event.inputs.ENVIRONMENT }}
-      DATE_TYPE: ${{ github.event.inputs.DATA-TYPE }}
-      DATE_NAME: ${{ github.event.inputs.DATA-NAME }}
+      DATA_TYPE: ${{ github.event.inputs.DATA-TYPE }}
+      DATA_NAME: ${{ github.event.inputs.DATA-NAME }}
       RETENTION: ${{ github.event.inputs.RETENTION }}
       MAX_MESSAGE_BYTES: ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
       NUM_PARTITIONS: ${{ github.event.inputs.NUM-PARTITIONS }}
