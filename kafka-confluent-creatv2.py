@@ -69,21 +69,21 @@ def set_default_config(admin_client, topic_name, config_dicts):
 
 def main():
 
-    # Variáveis de ambiente  
-    domain = str(os.getenv('DOMAIN'))
-    environment = str(os.getenv('ENVIRONMENT'))
-    date_type = str(os.getenv('DATE_TYPE'))
-    date_name = str(os.getenv('DATE_NAME'))
-    retention_ms = int(os.getenv('RETENTION_MS', '1'))
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', '1'))
-    num_partitions = int(os.getenv('NUM_PARTITIONS', '1'))
-    replication_factor = int(os.getenv('REPLICATION_FACTOR', '1'))
+    # Obtém variáveis de ambiente
+    domain = os.getenv('DOMAIN', '').strip()
+    environment = os.getenv('ENVIRONMENT', '').strip()
+    date_type = os.getenv('DATE_TYPE', '').strip()
+    date_name = os.getenv('DATE_NAME', '').strip()
+    retention_ms = os.getenv('RETENTION_MS', '1')
+    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', '1')
+    num_partitions = os.getenv('NUM_PARTITIONS', '1')
+    replication_factor = os.getenv('REPLICATION_FACTOR', '1')
 
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
     }
-    
+
     # Configurações específicas para o ambiente de produção
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
@@ -92,21 +92,21 @@ def main():
         replication_factor = replication_factor
 
     # Configuração do cliente Kafka
-    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
+    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
     admin_client = AdminClient(kafka_credentials)
 
     # Verifica se os parâmetros foram informados
-    if all(var not in (None, '') for var in [domain, environment, date_type, date_name]):
+    if all(var not in (None, '', ' ') for var in [domain, environment, date_type, date_name]):
         normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-        create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
+        create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
         if create_result == 0:    
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-            sys.exit(create_result ) 
+            sys.exit(create_result)
     else:
-        if any(param in (None, '') for param in [domain, environment, date_type, date_name]):
+        if any(param in (None, '', ' ') for param in [domain, environment, date_type, date_name]):
             # Identifica qual parâmetro está faltando
             for param, name in zip([domain, environment, date_type, date_name], ['domain', 'environment', 'date_type', 'date_name']):
-                if param in (None, ''):
+                if param in (None, '', ' '):
                     print(f"O parâmetro {name} não foi informado")
         else:
             print("Não há tópico a ser criado")  
