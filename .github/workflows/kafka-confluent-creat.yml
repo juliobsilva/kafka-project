@@ -18,7 +18,7 @@ on:
         - TI
         - TH
         - PR
-      DATA-TYPE:
+      DATA_TYPE:
         description: 'Tipo de dado'
         type: choice
         required: true
@@ -26,19 +26,19 @@ on:
         - Log
         - Etl
         - Cdc
-      DATA-NAME:
+      DATA_NAME:
         description: 'Nome do dado'
         required: true
       RETENTION:
         description: 'Tempo de retenção em milissegundos'
         required: true
-      MAX-MESSAGE-BYTES:
+      MAX_MESSAGE_BYTES:
         description: 'Tamanho máximo da mensagem em bytes'
         required: true
-      NUM-PARTITIONS:
+      NUM_PARTITIONS:
         description: 'Número de partições'
         required: true
-      REPLICATION-FACTOR:
+      REPLICATION_FACTOR:
         description: 'Fator de replicação'
         required: true    
 
@@ -66,9 +66,9 @@ jobs:
           python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \  
             ${{ github.event.inputs.DOMAIN }} \
             ${{ github.event.inputs.ENVIRONMENT }} \
-            ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \
+            ${{ github.event.inputs.DATA_TYPE }} \
+            ${{ github.event.inputs.DATA_NAME }} \
             ${{ github.event.inputs.RETENTION }} \
-            ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
-            ${{ github.event.inputs.NUM-PARTITIONS }} \
-            ${{ github.event.inputs.REPLICATION-FACTOR }}
+            ${{ github.event.inputs.MAX_MESSAGE_BYTES }} \
+            ${{ github.event.inputs.NUM_PARTITIONS }} \
+            ${{ github.event.inputs.REPLICATION_FACTOR }}
