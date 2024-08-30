@@ -69,28 +69,16 @@ def set_default_config(admin_client, topic_name, config_dicts):
         raise    
 
 def main():
-    # Configura o parser de argumentos
-    parser = argparse.ArgumentParser(description='Cria e normaliza um nome de tópico do Kafka.')
-    parser.add_argument('domain', type=str, help='Dominio')
-    parser.add_argument('environment', type=str, help='Ambiente')
-    parser.add_argument('date_type', type=str, help='Tipo do dado')
-    parser.add_argument('date_name', type=str, help='Nome do dado')
-    parser.add_argument('retention_ms', type=int, help='Tempo de retenção')
-    parser.add_argument('max_message_bytes', type=int, help='Política de limpeza')
-    parser.add_argument('num_partitions', type=int, help='Número de partições')
-    parser.add_argument('replication_factor', type=int, help='Fator de replicação')
-
-    args = parser.parse_args()    
 
     # Recebe os parâmetros da linha de comando  
-    domain = args.domain
-    environment = args.environment
-    date_type = args.date_type
-    date_name = args.date_name
-    retention_ms = args.retention_ms
-    max_message_bytes = args.max_message_bytes
-    num_partitions = args.num_partitions
-    replication_factor = args.replication_factor
+    domain = str(os.getenv('DOMAIN'))
+    environment = str(os.getenv('ENVIRONMENT'))
+    date_type = str(os.getenv('DATE_TYPE'))
+    date_name = str(os.getenv('DATE_NAME'))
+    retention_ms = int(os.getenv('RETENTION_MS'))
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
+    num_partitions = int(os.getenv('NUM_PARTITIONS'))
+    replication_factor = int(os.getenv('REPLICATION_FACTOR'))
 
     config_dicts = {
         "retention.ms": "7200000",  
@@ -100,6 +88,8 @@ def main():
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
         config_dicts["max.message.bytes"] = max_message_bytes
+        num_partitions = num_partitions
+        replication_factor = replication_factor
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))

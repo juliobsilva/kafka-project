@@ -43,6 +43,15 @@ on:
         required: true    
 
 jobs:
+  env:
+    DOMAIN: ${{ github.event.inputs.DOMAIN }}
+    ENVIRONMENT: ${{ github.event.inputs.ENVIRONMENT }}
+    DATA-TYPE: ${{ github.event.inputs.DATA-TYPE }}
+    DATA-NAME: ${{ github.event.inputs.DATA-NAME }}
+    RETENTION: ${{ github.event.inputs.RETENTION }}
+    MAX-MESSAGE-BYTES: ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
+    NUM-PARTITIONS: ${{ github.event.inputs.NUM-PARTITIONS }}
+    REPLICATION-FACTOR: ${{ github.event.inputs.REPLICATION-FACTOR }}
   kafka-topic-createv2:
     env:
       KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
@@ -62,12 +71,4 @@ jobs:
           pip install confluent-kafka
       - name: Kafka Topic Createv2
         run: |
-          python3 /$GITHUB_WORKSPACE/kafka-confluent-creatv2.py \
-            ${{ github.event.inputs.DOMAIN }} \
-            ${{ github.event.inputs.ENVIRONMENT }} \
-            ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \
-            ${{ github.event.inputs.RETENTION }} \
-            ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
-            ${{ github.event.inputs.NUM-PARTITIONS }} \
-            ${{ github.event.inputs.REPLICATION-FACTOR }} 
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-creatv2.py
