@@ -60,7 +60,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip install confluent-kafka
-      - name: Kafka Topic Create
+      - name: Kafka Topic Createv2
         run: |
           python3 /$GITHUB_WORKSPACE/kafka-confluent-creatv2.py \
             ${{ github.event.inputs.DOMAIN }} \
