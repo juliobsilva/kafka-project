@@ -74,10 +74,10 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     date_type = os.getenv('DATE_TYPE', '').strip()
     date_name = os.getenv('DATE_NAME', '').strip()
-    retention_ms = int(os.getenv('RETENTION_MS', '1'))
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', '1'))
-    num_partitions = os.getenv('NUM_PARTITIONS', '1')
-    replication_factor = int(os.getenv('REPLICATION_FACTOR', '1'))
+    retention_ms = int(os.getenv('RETENTION_MS', 1))
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1))
+    num_partitions = os.getenv('NUM_PARTITIONS', 1)
+    replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))
 
 
     # Imprime os valores para depuração
