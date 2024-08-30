@@ -1,6 +1,5 @@
 import json
 import os
-import argparse
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
 from confluent_kafka.error import KafkaException
@@ -69,49 +68,61 @@ def set_default_config(admin_client, topic_name, config_dicts):
         raise    
 
 def main():
-    # Configura o parser de argumentos
-    parser = argparse.ArgumentParser(description='Cria e normaliza um nome de tópico do Kafka.')
-    parser.add_argument('domain', type=str, help='Dominio')
-    parser.add_argument('environment', type=str, help='Ambiente')
-    parser.add_argument('date_type', type=str, help='Tipo do dado')
-    parser.add_argument('date_name', type=str, help='Nome do dado')
-    parser.add_argument('retention_ms', type=int, help='Tempo de retenção')
-    parser.add_argument('max_message_bytes', type=int, help='Política de limpeza')
-    parser.add_argument('num_partitions', type=int, help='Número de partições')
-    parser.add_argument('replication_factor', type=int, help='Fator de replicação')
 
-    args = parser.parse_args()    
+    # Obtém variáveis de ambiente
+    domain = os.getenv('DOMAIN', '').strip()
+    environment = os.getenv('ENVIRONMENT', '').strip()
+    data_type = os.getenv('DATA_TYPE', '').strip()
+    data_name = os.getenv('DATA_NAME', '').strip()
+    retention_ms = os.getenv('RETENTION_MS', 7200000)
+    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
+    num_partitions = os.getenv('NUM_PARTITIONS', 1)
+    replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
-    # Recebe os parâmetros da linha de comando  
-    domain = args.domain
-    environment = args.environment
-    date_type = args.date_type
-    date_name = args.date_name
-    retention_ms = args.retention_ms
-    max_message_bytes = args.max_message_bytes
-    num_partitions = args.num_partitions
-    replication_factor = args.replication_factor
+
+    # Imprime os valores para depuração
+    print(f"domain: '{domain}'")
+    print(f"environment: '{environment}'")
+    print(f"date_type: '{data_type}'")
+    print(f"date_name: '{data_name}'")
+    print(f"retention_ms: {retention_ms}")
+    print(f"max_message_bytes: {max_message_bytes}")
+    print(f"num_partitions: {num_partitions}")
+    print(f"replication_factor: {replication_factor}")
 
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
     }
-    
+
+    # Configurações específicas para o ambiente de produção
     if environment == "PR":
-        config_dicts["retention.ms"] = retention_ms
-        config_dicts["max.message.bytes"] = max_message_bytes
+        config_dicts["retention.ms"] = int(retention_ms)
+        config_dicts["max.message.bytes"] = int(max_message_bytes)
+        num_partitions = int(num_partitions)
+        replication_factor = int(replication_factor)
+        data_type = data_type
+        data_name = data_name
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
 
-    normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
-    create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
-
-    if create_result == 0:    
-        set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-
-    sys.exit(create_result )
+    # Verifica se os parâmetros foram informados
+    if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
+        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
+        create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
+        if create_result == 0:    
+            set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+            sys.exit(create_result)
+    else:
+        if any(param in (None, '', ' ') for param in [domain, environment, data_type, data_name]):
+            # Identifica qual parâmetro está faltando
+            for param, name in zip([domain, environment, data_type, data_name], ['domain', 'environment', 'date_type', 'date_name']):
+                if param in (None, '', ' '):
+                    print(f"O parâmetro {name} não foi informado")
+        else:
+            print("Não há tópico a ser criado")  
 
 if __name__ == "__main__":
     main()
