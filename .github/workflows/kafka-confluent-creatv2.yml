@@ -40,7 +40,7 @@ on:
         required: false
       REPLICATION-FACTOR:
         description: 'Fator de replicação'
-        required: true    
+        required: false  
 
 jobs:
   kafka-topic-createv2:
