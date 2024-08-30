@@ -1,6 +1,5 @@
 import json
 import os
-import argparse
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
 from confluent_kafka.error import KafkaException
@@ -70,7 +69,7 @@ def set_default_config(admin_client, topic_name, config_dicts):
 
 def main():
 
-    # Recebe os parâmetros da linha de comando  
+    # Variáveis de ambiente  
     domain = str(os.getenv('DOMAIN'))
     environment = str(os.getenv('ENVIRONMENT'))
     date_type = str(os.getenv('DATE_TYPE'))
@@ -85,6 +84,7 @@ def main():
         "max.message.bytes": "1048576"
     }
     
+    # Configurações específicas para o ambiente de produção
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
         config_dicts["max.message.bytes"] = max_message_bytes
@@ -95,6 +95,7 @@ def main():
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
 
+    # Verifica se os parâmetros foram informados
     if all(var not in (None, '') for var in [domain, environment, date_type, date_name]):
         normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
         create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)

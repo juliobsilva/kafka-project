@@ -34,10 +34,10 @@ on:
         required: false
       MAX-MESSAGE-BYTES:
         description: 'Tamanho máximo da mensagem em bytes'
-        required: true
+        required: false
       NUM-PARTITIONS:
         description: 'Número de partições'
-        required: true
+        required: false
       REPLICATION-FACTOR:
         description: 'Fator de replicação'
         required: true    
