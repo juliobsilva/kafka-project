@@ -94,7 +94,7 @@ def main():
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
-
+    
     normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
 
     if all(v is not None for v in [domain, environment, date_type, date_name, normalized_kafka_topic_name]):
