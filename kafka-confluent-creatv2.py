@@ -121,7 +121,8 @@ def main():
             for param, name in zip([domain, environment, data_type, data_name], ['domain', 'environment', 'date_type', 'date_name']):
                 if param in (None, '', ' '):
                     print(f"O parâmetro {name} não foi informado")
-                sys.exit(1) 
+        else:
+            print("Não há tópico a ser criado")  
 
 if __name__ == "__main__":
     main()
