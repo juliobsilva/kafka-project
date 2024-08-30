@@ -1,0 +1,73 @@
+name: Kafka Topic Createv2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:    
+      DOMAIN:
+        description: 'Domínio (Ex: Transacionar)'
+        required: true
+      ENVIRONMENT:
+        description: 'Ambiente (TU, TI, TH, PR)'
+        type: choice  
+        required: true
+        options:
+        - TU
+        - TI
+        - TH
+        - PR
+      DATA-TYPE:
+        description: 'Tipo de dado'
+        type: choice
+        required: true
+        options:
+        - Log
+        - Etl
+        - Cdc
+      DATA-NAME:
+        description: 'Nome do dado'
+        required: true
+      RETENTION:
+        description: 'Tempo de retenção em milissegundos'
+        required: false
+      MAX-MESSAGE-BYTES:
+        description: 'Tamanho máximo da mensagem em bytes'
+        required: true
+      NUM-PARTITIONS:
+        description: 'Número de partições'
+        required: true
+      REPLICATION-FACTOR:
+        description: 'Fator de replicação'
+        required: true    
+
+jobs:
+  kafka-topic-createv2:
+    env:
+      KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install confluent-kafka
+      - name: Kafka Topic Create
+        run: |
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-creatv2.py \
+            ${{ github.event.inputs.DOMAIN }} \
+            ${{ github.event.inputs.ENVIRONMENT }} \
+            ${{ github.event.inputs.DATA-TYPE }} \
+            ${{ github.event.inputs.DATA-NAME }} \
+            ${{ github.event.inputs.RETENTION }} \
+            ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
+            ${{ github.event.inputs.NUM-PARTITIONS }} \
+            ${{ github.event.inputs.REPLICATION-FACTOR }} 
