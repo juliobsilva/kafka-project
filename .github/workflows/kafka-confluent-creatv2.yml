@@ -47,12 +47,12 @@ jobs:
     env:
       DOMAIN: ${{ github.event.inputs.DOMAIN }}
       ENVIRONMENT: ${{ github.event.inputs.ENVIRONMENT }}
-      DATA-TYPE: ${{ github.event.inputs.DATA-TYPE }}
-      DATA-NAME: ${{ github.event.inputs.DATA-NAME }}
+      DATA_TYPE: ${{ github.event.inputs.DATA-TYPE }}
+      DATA_NAME: ${{ github.event.inputs.DATA-NAME }}
       RETENTION: ${{ github.event.inputs.RETENTION }}
-      MAX-MESSAGE-BYTES: ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
-      NUM-PARTITIONS: ${{ github.event.inputs.NUM-PARTITIONS }}
-      REPLICATION-FACTOR: ${{ github.event.inputs.REPLICATION-FACTOR }}
+      MAX_MESSAGE_BYTES: ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
+      NUM_PARTITIONS: ${{ github.event.inputs.NUM-PARTITIONS }}
+      REPLICATION_FACTOR: ${{ github.event.inputs.REPLICATION-FACTOR }}
       KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
     runs-on: ubuntu-latest
     steps:
