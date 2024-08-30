@@ -86,11 +86,11 @@ def main():
     domain = args.domain
     environment = args.environment
     date_type = args.date_type
-    date_name = args.date_name
-    retention_ms = args.retention_ms
+    date_name = args.date_name    
     max_message_bytes = args.max_message_bytes
     num_partitions = args.num_partitions
     replication_factor = args.replication_factor
+    retention_ms = args.retention_ms
 
     config_dicts = {
         "retention.ms": "7200000",  
