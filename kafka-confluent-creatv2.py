@@ -72,8 +72,8 @@ def main():
     # Obtém variáveis de ambiente
     domain = os.getenv('DOMAIN', '').strip()
     environment = os.getenv('ENVIRONMENT', '').strip()
-    date_type = os.getenv('DATE_TYPE', '').strip()
-    date_name = os.getenv('DATE_NAME', '').strip()
+    date_type = os.getenv('DATE-TYPE', '').strip()
+    date_name = os.getenv('DATE-NAME', '').strip()
     retention_ms = os.getenv('RETENTION_MS', '1')
     max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', '1')
     num_partitions = os.getenv('NUM_PARTITIONS', '1')
