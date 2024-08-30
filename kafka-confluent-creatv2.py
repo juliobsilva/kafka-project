@@ -108,17 +108,21 @@ def main():
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
 
-    try:
-        # Verifica se os parâmetros foram informados
-        if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
-            normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
-            create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
-            if create_result == 0:    
-                set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-                sys.exit(create_result)
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        sys.exit(1)
+    # Verifica se os parâmetros foram informados
+    if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
+        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
+        create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
+        if create_result == 0:    
+            set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+            sys.exit(create_result)
+    else:
+        if any(param in (None, '', ' ') for param in [domain, environment, data_type, data_name]):
+            # Identifica qual parâmetro está faltando
+            for param, name in zip([domain, environment, data_type, data_name], ['domain', 'environment', 'date_type', 'date_name']):
+                if param in (None, '', ' '):
+                    print(f"O parâmetro {name} não foi informado")
+        else:
+            print("Não há tópico a ser criado")  
 
 if __name__ == "__main__":
     main()
