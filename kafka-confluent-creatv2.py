@@ -90,6 +90,8 @@ def main():
         config_dicts["max.message.bytes"] = max_message_bytes
         num_partitions = num_partitions
         replication_factor = replication_factor
+        date_type = date_type
+        date_name = date_name
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
