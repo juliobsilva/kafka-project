@@ -117,12 +117,11 @@ def main():
             sys.exit(create_result)
     else:
         if any(param in (None, '', ' ') for param in [domain, environment, data_type, data_name]):
-            # Identifica qual parâmetro está faltando
-            for param, name in zip([domain, environment, data_type, data_name], ['domain', 'environment', 'date_type', 'date_name']):
-                if param in (None, '', ' '):
-                    print(f"O parâmetro {name} não foi informado")
+            print("Parâmetros não informados.")
+            sys.exit(1)
         else:
-            print("Não há tópico a ser criado")  
+            print("Erro inesperado.")
+            sys.exit(1)  
 
 if __name__ == "__main__":
     main()
