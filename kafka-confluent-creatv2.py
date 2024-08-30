@@ -116,12 +116,8 @@ def main():
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result)
     else:
-        if any(param in (None, '', ' ') for param in [domain, environment, data_type, data_name]):
-            print("Parâmetros não informados.")
-            sys.exit(1)
-        else:
-            print("Erro inesperado.")
-            sys.exit(1)  
+        print("Parâmetros {var} não informados.") 
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
