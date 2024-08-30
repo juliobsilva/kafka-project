@@ -105,7 +105,7 @@ def main():
         date_name = date_name
 
     # Configuração do cliente Kafka
-    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
+    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
 
     # Verifica se os parâmetros foram informados
