@@ -103,7 +103,7 @@ def main():
             sys.exit(create_result ) 
     else:
         for all_var in [domain, environment, date_type, date_name]:
-            if all_var is None:
+            if all_var is (None, ''):
                 print("O parametro", all_var, "é obrigatório")  
                 sys.exit(1)
             else:
