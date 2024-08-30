@@ -116,7 +116,8 @@ def main():
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result)
     else:       
-        print("Não há tópico a ser criado")  
+        print("Não há tópico a ser criado")
+        sys.exit(1)  
 
 if __name__ == "__main__":
     main()
