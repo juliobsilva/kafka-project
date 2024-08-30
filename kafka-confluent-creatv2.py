@@ -96,14 +96,18 @@ def main():
     admin_client = AdminClient(kafka_credentials)
 
     if all(var not in (None, '') for var in [domain, environment, date_type, date_name]):
-        print("Os parametros", vars(), "não estão preenchidos")
         normalized_kafka_topic_name = topic_name_normalized(domain, environment, date_type, date_name)
         create_result  = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
         if create_result == 0:    
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result ) 
     else:
-        print("Não ha topico a ser criado")  
+        for all_var in [domain, environment, date_type, date_name]:
+            if all_var is None:
+                print("O parametro", all_var, "é obrigatório")  
+                sys.exit(1)
+            else:
+                print("Não ha topico a ser criado")  
 
 if __name__ == "__main__":
     main()
