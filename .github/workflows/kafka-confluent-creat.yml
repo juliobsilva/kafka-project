@@ -40,7 +40,8 @@ on:
         required: true
       RETENTION:
         description: 'Tempo de retenção em milissegundos'
-        required: false    
+        required: false
+        default: 7200000    
 
 jobs:
   kafka-topic-create:
