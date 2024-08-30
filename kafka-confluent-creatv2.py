@@ -80,17 +80,6 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS', 1)
     replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
-
-    # Imprime os valores para depuração
-    print(f"domain: '{domain}'")
-    print(f"environment: '{environment}'")
-    print(f"date_type: '{data_type}'")
-    print(f"date_name: '{data_name}'")
-    print(f"retention_ms: {retention_ms}")
-    print(f"max_message_bytes: {max_message_bytes}")
-    print(f"num_partitions: {num_partitions}")
-    print(f"replication_factor: {replication_factor}")
-
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
