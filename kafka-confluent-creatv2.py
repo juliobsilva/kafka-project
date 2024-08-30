@@ -102,12 +102,10 @@ def main():
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result ) 
     else:
-        for all_var in [domain, environment, date_type, date_name]:
-            if all_var is (None, ''):
-                print("O parametro", all_var, "é obrigatório")  
-                sys.exit(1)
-            else:
-                print("Não ha topico a ser criado")  
+        for all in [domain, environment, date_type, date_name]:
+            if all in (None, ''):
+                print(f"O parametro {all} não foi informado")
+    print("Não ha topico a ser criado")  
 
 if __name__ == "__main__":
     main()
