@@ -78,7 +78,7 @@ def main():
     parser.add_argument('max_message_bytes', type=int, help='Política de limpeza')
     parser.add_argument('num_partitions', type=int, help='Número de partições')
     parser.add_argument('replication_factor', type=int, help='Fator de replicação')
-    parser.add_argument('--retention_ms', type=int, help='Tempo de retenção', default=None)
+    parser.add_argument('--retention_ms', type=int, help='Tempo de retenção')
 
     args = parser.parse_args()    
 
