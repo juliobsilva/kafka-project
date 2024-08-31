@@ -28,7 +28,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
     else:
-        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=3)
+        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=1, replication_factor=3)
 
     try:
         # Verifica se o tópico já existe
@@ -93,6 +93,14 @@ def main():
         replication_factor = int(replication_factor)
         data_type = data_type
         data_name = data_name
+
+    if environment != "PRD" and num_partitions <= 3 and replication_factor <= 3:
+        num_partitions = num_partitions
+        replication_factor = replication_factor
+    else:
+        logging.error("Ambiente diferente de PRD não pode ter mais de uma partição e fator de replicação menor que 3.")
+        sys.exit(1)
+
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
