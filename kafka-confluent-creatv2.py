@@ -93,8 +93,12 @@ def main():
         replication_factor = int(replication_factor)
         data_type = data_type
         data_name = data_name
-    if environment == "PRD" and num_partitions <=3:
+    if environment == "PRD" and num_partitions <=3 and replication_factor <= 3:
         num_partitions = num_partitions
+        replication_factor = replication_factor
+    else:
+        logging.error("Número de partições e fator de replicação devem ser menores ou iguais a 3")
+        sys.exit(1)
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
