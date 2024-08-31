@@ -31,15 +31,19 @@ on:
         required: true
       RETENTION:
         description: 'Tempo de retenção em milissegundos'
+        type: number
         required: false
       MAX-MESSAGE-BYTES:
         description: 'Tamanho máximo da mensagem em bytes'
+        type: number
         required: false
       NUM-PARTITIONS:
         description: 'Número de partições'
+        type: number
         required: false
       REPLICATION-FACTOR:
         description: 'Fator de replicação'
+        type: number
         required: false  
 
 jobs:

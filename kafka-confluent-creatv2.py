@@ -94,7 +94,7 @@ def main():
         data_type = data_type
         data_name = data_name
 
-    if environment != "PR" and num_partitions <=3 and replication_factor <= 3:
+    if environment != "PR" and num_partitions <= 3 and replication_factor <= 3:
         num_partitions = num_partitions
         replication_factor = replication_factor
     else:
