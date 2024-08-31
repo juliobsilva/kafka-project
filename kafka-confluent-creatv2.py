@@ -89,17 +89,16 @@ def main():
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
         config_dicts["max.message.bytes"] = max_message_bytes
-        num_partitions = num_partitions
-        replication_factor = replication_factor
-        data_type = data_type
-        data_name = data_name
-
-    if environment != "PR" and num_partitions <= 3 and replication_factor <= 3:
-        num_partitions = num_partitions
-        replication_factor = replication_factor
     else:
-        logging.error("Número de partições e fator de replicação devem ser menores ou iguais a 3.")
-        sys.exit(1)
+        # Valida número de partições para ambientes não produtivos
+        if not (1 < num_partitions <= 3):
+            logging.error(f"Número de partições inválido: {num_partitions}. Deve ser entre 2 e 3.")
+            sys.exit(1)
+        
+        # Valida fator de replicação para ambientes não produtivos
+        if not (2 < replication_factor <= 3):
+            logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser entre 3 e 3.")
+            sys.exit(1)
 
 
     # Configuração do cliente Kafka
