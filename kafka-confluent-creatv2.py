@@ -75,8 +75,8 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = int(os.getenv('RETENTION_MS'))
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
+    retention_ms = int(os.getenv('RETENTION_MS', 7200000))
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1048576))
     num_partitions = int(os.getenv('NUM_PARTITIONS'))
     replication_factor = int(os.getenv('REPLICATION_FACTOR'))
 
