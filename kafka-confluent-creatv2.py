@@ -80,14 +80,6 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS', 1)
     replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
-    # Verifica se os parâmetros foram informados
-    if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
-        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
-        create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
-        if create_result == 0:    
-            set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-            sys.exit(create_result)
-
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
@@ -105,6 +97,18 @@ def main():
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
+
+    #Verifica se todos os parâmetros obrigatórios foram informados
+    if not all([domain, environment, data_type, data_name]):
+        missing_params = [name for param, name in zip([domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME']) if not param]
+        logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
+        sys.exit(1)
+    else:
+        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
+        create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
+        if create_result == 0:
+            set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
+            sys.exit(create_result)
 
 if __name__ == "__main__":
     main()
