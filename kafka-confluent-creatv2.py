@@ -93,6 +93,7 @@ def main():
         replication_factor = int(replication_factor)
         data_type = data_type
         data_name = data_name
+        print(type(num_partitions))
 
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
