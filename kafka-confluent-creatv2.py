@@ -94,8 +94,8 @@ def main():
     
     try:
         config_dicts = {
-            "retention.ms": retention_ms,
-            "max.message.bytes": max_message_bytes
+            "retention.ms": int(retention_ms),
+            "max.message.bytes": int(max_message_bytes)
         }
 
         if environment == "PR":
