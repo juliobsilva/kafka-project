@@ -75,8 +75,8 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = os.getenv('RETENTION_MS', 7200000)
-    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
+    retention_ms = int(os.getenv('RETENTION_MS'))
+    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
     num_partitions = int(os.getenv('NUM_PARTITIONS'))
     replication_factor = int(os.getenv('REPLICATION_FACTOR'))
 
@@ -87,10 +87,10 @@ def main():
 
     # Configurações específicas para o ambiente de produção
     if environment == "PR":
-        config_dicts["retention.ms"] = int(retention_ms)
-        config_dicts["max.message.bytes"] = int(max_message_bytes)
-        num_partitions = int(num_partitions)
-        replication_factor = int(replication_factor)
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["max.message.bytes"] = max_message_bytes
+        num_partitions = num_partitions
+        replication_factor = replication_factor
         data_type = data_type
         data_name = data_name
 
