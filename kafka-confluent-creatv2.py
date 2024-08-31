@@ -73,10 +73,10 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = os.getenv('RETENTION_MS', '7200000').strip()
-    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', '1048576').strip()
-    num_partitions = os.getenv('NUM_PARTITIONS', '1').strip()
-    replication_factor = os.getenv('REPLICATION_FACTOR', '1').strip()
+    retention_ms = os.getenv('RETENTION_MS', 7200000)
+    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
+    num_partitions = os.getenv('NUM_PARTITIONS', 1)
+    replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
     # Verifica se todos os parâmetros obrigatórios foram informados
     if not all([domain, environment, data_type, data_name]):
