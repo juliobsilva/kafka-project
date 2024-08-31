@@ -95,6 +95,14 @@ def main():
         data_name = data_name
         print(type(num_partitions))
 
+    num_partitions = int(num_partitions)
+    replication_factor = int(replication_factor)
+
+    if environment != "PR" and num_partitions <= 3 and replication_factor <= 3:
+        logging.error("O número de partições deve ser 1 para ambientes diferentes de PR.")
+        sys.exit(1)
+
+
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
