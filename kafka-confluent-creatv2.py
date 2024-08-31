@@ -93,10 +93,6 @@ def main():
         replication_factor = int(replication_factor)
         data_type = data_type
         data_name = data_name
-        print(type(num_partitions))
-
-    #num_partitions = int(num_partitions)
-    #replication_factor = int(replication_factor)
 
     if environment != "PR" and num_partitions <= 3 and replication_factor <= 3:
         num_partitions = num_partitions
