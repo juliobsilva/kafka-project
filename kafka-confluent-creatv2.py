@@ -94,13 +94,6 @@ def main():
         data_type = data_type
         data_name = data_name
 
-    num_partitions = int(num_partitions)
-    replication_factor = int(replication_factor)
-    if environment != "PR" and num_partitions <= 3 and replication_factor <= 3:
-        num_partitions = num_partitions
-        replication_factor = replication_factor
-
-
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
     admin_client = AdminClient(kafka_credentials)
