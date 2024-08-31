@@ -80,6 +80,8 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS')
     replication_factor = os.getenv('REPLICATION_FACTOR')
 
+    print(type(num_partitions))
+
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
