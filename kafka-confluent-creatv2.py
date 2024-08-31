@@ -80,6 +80,8 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS', 1)
     replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
+    num_partitions = int(num_partitions)
+    replication_factor = int(replication_factor)
     print(type(num_partitions))
     print(type(replication_factor))
 
