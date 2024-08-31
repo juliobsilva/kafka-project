@@ -28,7 +28,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
     else:
-        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=1, replication_factor=3)
+        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
 
     try:
         # Verifica se o tópico já existe
