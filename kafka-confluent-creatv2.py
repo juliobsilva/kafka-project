@@ -77,8 +77,8 @@ def main():
     data_name = os.getenv('DATA_NAME', '').strip()
     retention_ms = os.getenv('RETENTION_MS', 7200000)
     max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
-    num_partitions = int(os.getenv('NUM_PARTITIONS', 1))
-    replication_factor = int(os.getenv('REPLICATION_FACTOR', 1))
+    num_partitions = int(os.getenv('NUM_PARTITIONS'))
+    replication_factor = int(os.getenv('REPLICATION_FACTOR'))
 
     config_dicts = {
         "retention.ms": "7200000",  
