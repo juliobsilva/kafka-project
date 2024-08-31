@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 import sys
@@ -79,17 +80,6 @@ def main():
     num_partitions = os.getenv('NUM_PARTITIONS', 1)
     replication_factor = os.getenv('REPLICATION_FACTOR', 1)
 
-
-    # Imprime os valores para depuração
-    print(f"domain: '{domain}'")
-    print(f"environment: '{environment}'")
-    print(f"date_type: '{data_type}'")
-    print(f"date_name: '{data_name}'")
-    print(f"retention_ms: {retention_ms}")
-    print(f"max_message_bytes: {max_message_bytes}")
-    print(f"num_partitions: {num_partitions}")
-    print(f"replication_factor: {replication_factor}")
-
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
@@ -116,13 +106,10 @@ def main():
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result)
     else:
-        if any(param in (None, '', ' ') for param in [domain, environment, data_type, data_name]):
-            # Identifica qual parâmetro está faltando
-            for param, name in zip([domain, environment, data_type, data_name], ['domain', 'environment', 'date_type', 'date_name']):
-                if param in (None, '', ' '):
-                    print(f"O parâmetro {name} não foi informado")
-        else:
-            print("Não há tópico a ser criado")  
+         missing_params = [name for param, name in zip([domain, environment, data_type, data_name],['domain', 'environment', 'data_type', 'data_name']) if param in (None, '', ' ')]
+         if missing_params:
+             logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
+             sys.exit(1)
 
 if __name__ == "__main__":
     main()

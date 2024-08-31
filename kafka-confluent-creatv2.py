@@ -5,26 +5,19 @@ import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
 from confluent_kafka.error import KafkaException
 
+# Configuração do logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def topic_name_normalized(domain, environment, date_type, date_name):
-    # Normaliza os valores de entrada
-    domain_normalized = domain.lower()
-    environment_normalized = environment.lower()
-    date_type_normalized = date_type.lower()
-    date_name_normalized = date_name.lower()
-
-    # Gera o nome do tópico seguindo o template
-    normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
-    
-    return normalized_kafka_topic_name
+    """
+    Normaliza os valores de entrada e gera o nome do tópico.
+    """
+    return f'{domain.lower()}-{environment.lower()}-{date_type.lower()}-{date_name.lower()}'
 
 def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor):
-
-    environment = environment
-    num_partitions = num_partitions
-    replication_factor = replication_factor
-
-    # Definição do novo tópico
+    """
+    Cria um tópico Kafka, verificando se já existe e configurando o número de partições e fator de replicação.
+    """
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
     else:
@@ -34,7 +27,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
         # Verifica se o tópico já existe
         metadata = admin_client.list_topics(timeout=10)
         if normalized_kafka_topic_name in metadata.topics:
-            print(f"O tópico '{normalized_kafka_topic_name}' já existe.")
+            logging.info(f"O tópico '{normalized_kafka_topic_name}' já existe.")
             return 1
 
         # Tentativa de criar o tópico
@@ -43,73 +36,82 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
         # Verificação do resultado
         for topic, future in result.items():
             try:
-                future.result() 
-                print(f"Tópico '{topic}' criado com sucesso.")
+                future.result()
+                logging.info(f"Tópico '{topic}' criado com sucesso.")
             except KafkaException as e:
-                print(f"Falha ao criar o tópico '{topic}': {e}")
+                logging.error(f"Falha ao criar o tópico '{topic}': {e}")
                 return 1
         return 0
     except KafkaException as e:
-        print(f"Erro ao tentar verificar ou criar o tópico: {e}")
+        logging.error(f"Erro ao tentar verificar ou criar o tópico: {e}")
         return 1
     
 def set_default_config(admin_client, topic_name, config_dicts):
-
+    """
+    Define a configuração padrão para um tópico Kafka.
+    """
     try:
         # Criação de objetos ConfigEntry para cada configuração a ser definida
         config_entries = [ConfigEntry(name=name, value=str(value), incremental_operation=AlterConfigOpType['SET'])
-                        for name, value in config_dicts.items()]
+                          for name, value in config_dicts.items()]
         
         # Criação de ConfigResource com a lista de configurações
         resource = ConfigResource('topic', topic_name, incremental_configs=config_entries)        
         result_dict = admin_client.incremental_alter_configs([resource])
         result_dict[resource].result()
+        logging.info(f"Configurações aplicadas ao tópico '{topic_name}' com sucesso.")
     except KafkaException as e:
-        print(f"Erro ao tentar definir as configurações: {e}")
+        logging.error(f"Erro ao tentar definir as configurações: {e}")
         raise    
 
 def main():
-
+    """
+    Função principal que coordena a criação do tópico e a configuração do Kafka.
+    """
     # Obtém variáveis de ambiente
     domain = os.getenv('DOMAIN', '').strip()
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = os.getenv('RETENTION_MS', 7200000)
-    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
-    num_partitions = os.getenv('NUM_PARTITIONS', 1)
-    replication_factor = os.getenv('REPLICATION_FACTOR', 1)
+    retention_ms = os.getenv('RETENTION_MS', '7200000').strip()
+    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', '1048576').strip()
+    num_partitions = os.getenv('NUM_PARTITIONS', '1').strip()
+    replication_factor = os.getenv('REPLICATION_FACTOR', '1').strip()
 
-    config_dicts = {
-        "retention.ms": "7200000",  
-        "max.message.bytes": "1048576"
-    }
-
-    # Configurações específicas para o ambiente de produção
-    if environment == "PR":
-        config_dicts["retention.ms"] = int(retention_ms)
-        config_dicts["max.message.bytes"] = int(max_message_bytes)
-        num_partitions = int(num_partitions)
-        replication_factor = int(replication_factor)
-        data_type = data_type
-        data_name = data_name
+    # Verifica se todos os parâmetros obrigatórios foram informados
+    if not all([domain, environment, data_type, data_name]):
+        missing_params = [name for param, name in zip([domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME']) if not param]
+        logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
+        sys.exit(1)
 
     # Configuração do cliente Kafka
-    kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
-    admin_client = AdminClient(kafka_credentials)
+    try:
+        kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS', '{}'))
+        admin_client = AdminClient(kafka_credentials)
+    except json.JSONDecodeError:
+        logging.error("Credenciais Kafka inválidas.")
+        sys.exit(1)
+    
+    try:
+        config_dicts = {
+            "retention.ms": retention_ms,
+            "max.message.bytes": max_message_bytes
+        }
 
-    # Verifica se os parâmetros foram informados
-    if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
+        if environment == "PR":
+            config_dicts["retention.ms"] = int(retention_ms)
+            config_dicts["max.message.bytes"] = int(max_message_bytes)
+            num_partitions = int(num_partitions)
+            replication_factor = int(replication_factor)
+
         normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
         create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
-        if create_result == 0:    
+        
+        if create_result == 0:
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
-            sys.exit(create_result)
-    else:
-         missing_params = [name for param, name in zip([domain, environment, data_type, data_name],['domain', 'environment', 'data_type', 'data_name']) if param in (None, '', ' ')]
-         if missing_params:
-             logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
-             sys.exit(1)
+    except Exception as e:
+        logging.error(f"Ocorreu um erro inesperado: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
