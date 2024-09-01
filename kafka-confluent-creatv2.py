@@ -89,17 +89,17 @@ def main():
     if environment == "PR":
         config_dicts["retention.ms"] = retention_ms
         config_dicts["max.message.bytes"] = max_message_bytes
-        if not (2 < replication_factor <= 3):
+        if not (2 <= replication_factor <= 3):
             logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
             sys.exit(1)
     else:
         # Valida número de partições para ambientes não produtivos
-        if not (1 < num_partitions <= 3):
+        if not (1 <= num_partitions <= 3):
             logging.error(f"Número de partições inválido: {num_partitions}. Deve ser no mínimo (2) ou no máximo (3).")
             sys.exit(1)
         
         # Valida fator de replicação para ambientes não produtivos
-        if not (2 < replication_factor <= 3):
+        if not (2 <= replication_factor <= 3):
             logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
             sys.exit(1)
 
