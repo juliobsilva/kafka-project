@@ -80,10 +80,10 @@ def main():
     
     # Validação dos valores de entrada
     try:
-        retention_ms = int(os.getenv('RETENTION_MS', 7200000))
-        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1048576))
-        num_partitions = int(os.getenv('NUM_PARTITIONS', 1))
-        replication_factor = int(os.getenv('REPLICATION_FACTOR', 2))
+        retention_ms = int(os.getenv('RETENTION_MS', '7200000'))
+        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', '1048576'))
+        num_partitions = int(os.getenv('NUM_PARTITIONS', '1'))
+        replication_factor = int(os.getenv('REPLICATION_FACTOR', '2'))
     except ValueError as e:
         logging.error(f"Erro ao tentar converter os valores de entrada: {e}")
         sys.exit(1)
