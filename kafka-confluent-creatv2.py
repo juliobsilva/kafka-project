@@ -8,15 +8,16 @@ from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, Alte
 from confluent_kafka.error import KafkaException
 
 
-def topic_name_normalized(domain, environment, date_type, date_name):
+def topic_name_normalized(cost_center, domain, environment, date_type, date_name):
     # Normaliza os valores de entrada
     domain_normalized = domain.lower()
     environment_normalized = environment.lower()
     date_type_normalized = date_type.lower()
     date_name_normalized = date_name.lower()
+    cost_center_normalized = cost_center.lower()
 
     # Gera o nome do tópico seguindo o template
-    normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
+    normalized_kafka_topic_name = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
     
     return normalized_kafka_topic_name
 
@@ -77,6 +78,7 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
+    cost_center = os.getenv('COST_CENTER', '').strip()
     
     # Validação dos valores de entrada
     try:
@@ -118,12 +120,12 @@ def main():
     admin_client = AdminClient(kafka_credentials)
 
     #Verifica se todos os parâmetros obrigatórios foram informados
-    if not all([domain, environment, data_type, data_name]):
-        missing_params = [name for param, name in zip([domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME']) if not param]
+    if not all([cost_center, domain, environment, data_type, data_name]):
+        missing_params = [name for param, name in zip([cost_center, domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME', 'COST_CENTER']) if not param]
         logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
         sys.exit(1)
     else:
-        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
+        normalized_kafka_topic_name = topic_name_normalized(cost_center, domain, environment, data_type, data_name)
         create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
         if create_result == 0:
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)

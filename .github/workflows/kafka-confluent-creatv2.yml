@@ -55,6 +55,7 @@ on:
 jobs:
   kafka-topic-createv2:
     env:
+      COST_CENTER: ${{ github.event.inputs.COST-CENTER }}
       DOMAIN: ${{ github.event.inputs.DOMAIN }}
       ENVIRONMENT: ${{ github.event.inputs.ENVIRONMENT }}
       DATA_TYPE: ${{ github.event.inputs.DATA-TYPE }}
