@@ -36,11 +36,11 @@ on:
         description: 'Nome do dado'
         required: true
       RETENTION-MS:
-        description: 'Tempo de retenção em milissegundos'
+        description: 'Tempo de retenção em milissegundos ( PROD )'
         type: number
         required: false
       MAX-MESSAGE-BYTES:
-        description: 'Tamanho máximo da mensagem em bytes'
+        description: 'Tamanho máximo da mensagem em bytes ( PROD )'
         type: number
         required: false
       NUM-PARTITIONS:
