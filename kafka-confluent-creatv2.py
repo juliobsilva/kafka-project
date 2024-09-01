@@ -75,10 +75,15 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = int(os.getenv('RETENTION'))
-    max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
-    num_partitions = int(os.getenv('NUM_PARTITIONS'))
-    replication_factor = int(os.getenv('REPLICATION_FACTOR'))
+
+    try:
+        retention_ms = int(os.getenv('RETENTION'))
+        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
+        num_partitions = int(os.getenv('NUM_PARTITIONS'))
+        replication_factor = int(os.getenv('REPLICATION_FACTOR'))
+    except ValueError as e:
+        logging.error(f"Erro ao tentar converter os valores de entrada: {e}")
+        sys.exit(1)
 
     config_dicts = {
         "retention.ms": "7200000",  
