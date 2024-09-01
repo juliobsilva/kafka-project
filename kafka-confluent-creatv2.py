@@ -80,7 +80,7 @@ def main():
     
     # Validação dos valores de entrada
     try:
-        retention_ms = int(os.getenv('RETENTION'))
+        retention_ms = int(os.getenv('RETENTION_MS'))
         max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
         num_partitions = int(os.getenv('NUM_PARTITIONS'))
         replication_factor = int(os.getenv('REPLICATION_FACTOR'))
