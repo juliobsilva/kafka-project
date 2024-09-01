@@ -80,10 +80,10 @@ def main():
     
     # Validação dos valores de entrada
     try:
-        retention_ms = int(os.getenv('RETENTION_MS', 7200000))
-        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES', 1048576))
-        num_partitions = int(os.getenv('NUM_PARTITIONS', 1))
-        replication_factor = int(os.getenv('REPLICATION_FACTOR', 2))
+        retention_ms = int(os.getenv('RETENTION_MS'))
+        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
+        num_partitions = int(os.getenv('NUM_PARTITIONS'))
+        replication_factor = int(os.getenv('REPLICATION_FACTOR'))
     except ValueError as e:
         logging.error(f"Erro ao tentar converter os valores de entrada: {e}")
         sys.exit(1)
@@ -96,8 +96,8 @@ def main():
 
     # Configurações específicas para o ambiente de produção
     if environment == "PR":
-        config_dicts["retention.ms"] = int(retention_ms)
-        config_dicts["max.message.bytes"] = int(max_message_bytes)
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["max.message.bytes"] = max_message_bytes
         if not (2 <= replication_factor <= 3):
             logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
             sys.exit(1)
