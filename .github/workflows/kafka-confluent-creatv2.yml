@@ -35,9 +35,6 @@ on:
       DATA-NAME:
         description: 'Nome do dado'
         required: true
-      DATA-FORMAT:
-        description: 'Formato dos dados'
-        required: true
       RETENTION-MS:
         description: 'Tempo de retenção em milissegundos'
         type: number
