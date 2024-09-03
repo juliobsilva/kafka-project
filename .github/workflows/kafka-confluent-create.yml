@@ -5,9 +5,9 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:    
-      DOMAIN:
-        description: 'Domínio (Ex: Transacionar)'
+    inputs: 
+      COST-CENTER:
+        description: 'Centro de custo'
         required: true
       ENVIRONMENT:
         description: 'Ambiente (TU, TI, TH, PR)'
@@ -18,6 +18,12 @@ on:
         - TI
         - TH
         - PR
+      DOMAIN:
+        description: 'Domínio (Ex: Transacionar)'
+        required: true
+      NAME-SPACE:
+        description: 'Name Space'
+        required: true      
       DATA-TYPE:
         description: 'Tipo de dado'
         type: choice
@@ -29,26 +35,35 @@ on:
       DATA-NAME:
         description: 'Nome do dado'
         required: true
-      RETENTION:
-        description: 'Tempo de retenção em milissegundos'
+      RETENTION-MS:
+        description: 'Tempo de retenção em milissegundos (PROD)'
         type: number
         required: false
       MAX-MESSAGE-BYTES:
-        description: 'Tamanho máximo da mensagem em bytes'
+        description: 'Tamanho máximo da mensagem em bytes (PROD)'
         type: number
-        required: true
+        required: false
       NUM-PARTITIONS:
         description: 'Número de partições'
         type: number
-        required: true
+        required: false
       REPLICATION-FACTOR:
         description: 'Fator de replicação'
         type: number
-        required: true    
+        required: false  
 
 jobs:
   kafka-topic-create:
     env:
+      COST_CENTER: ${{ github.event.inputs.COST-CENTER }}
+      DOMAIN: ${{ github.event.inputs.DOMAIN }}
+      ENVIRONMENT: ${{ github.event.inputs.ENVIRONMENT }}
+      DATA_TYPE: ${{ github.event.inputs.DATA-TYPE }}
+      DATA_NAME: ${{ github.event.inputs.DATA-NAME }}
+      RETENTION_MS: ${{ github.event.inputs.RETENTION-MS }}
+      MAX_MESSAGE_BYTES: ${{ github.event.inputs.MAX-MESSAGE-BYTES }}
+      NUM_PARTITIONS: ${{ github.event.inputs.NUM-PARTITIONS }}
+      REPLICATION_FACTOR: ${{ github.event.inputs.REPLICATION-FACTOR }}
       KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
     runs-on: ubuntu-latest
     steps:
@@ -64,14 +79,6 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip install confluent-kafka
-      - name: Kafka Topic Create
+      - name: Kafka Topic Createv2
         run: |
-          python3 /$GITHUB_WORKSPACE/kafka-confluent-creat.py \
-            ${{ github.event.inputs.DOMAIN }} \
-            ${{ github.event.inputs.ENVIRONMENT }} \
-            ${{ github.event.inputs.DATA-TYPE }} \
-            ${{ github.event.inputs.DATA-NAME }} \
-            ${{ github.event.inputs.RETENTION }} \
-            ${{ github.event.inputs.MAX-MESSAGE-BYTES }} \
-            ${{ github.event.inputs.NUM-PARTITIONS }} \
-            ${{ github.event.inputs.REPLICATION-FACTOR }} 
+          python3 /$GITHUB_WORKSPACE/kafka-confluent-create.py
