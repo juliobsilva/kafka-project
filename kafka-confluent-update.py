@@ -56,7 +56,7 @@ def main():
     
     # Define configurações para serem aplicadas
     config_dicts = {
-        'retention.ms': '7200000',
+        'retention.ms': '1048576',
     }
     try:
         set_config(admin_client, topic_name, config_dicts)
