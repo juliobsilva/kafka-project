@@ -113,12 +113,11 @@ def main():
         if not (2 <= replication_factor <= 3):
             logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
             sys.exit(1)
-
-
+    
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
-    admin_client = AdminClient(kafka_credentials)
-
+    admin_client = AdminClient(kafka_credentials) 
+        
     #Verifica se todos os parâmetros obrigatórios foram informados
     if not all([cost_center, domain, environment, data_type, data_name]):
         missing_params = [name for param, name in zip([cost_center, domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME', 'COST_CENTER']) if not param]
