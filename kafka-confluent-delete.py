@@ -1,3 +1,5 @@
+import logging
+import json
 import sys
 import argparse
 from confluent_kafka.admin import AdminClient
@@ -6,13 +8,22 @@ from confluent_kafka.error import KafkaException
 def delete_topic(admin_client, topic_name):
     try:
         # Verifica se o tópico já existe
-        metadata = admin_client.list_topics(timeout=10)
+        try:
+            metadata = admin_client.list_topics(timeout=10)
+        except KafkaException as e:
+            print(f'Erro ao listar tópicos: {e}')
+            return 1
+        
         if topic_name not in metadata.topics:
             print(f'O tópico "{topic_name}" não existe.')
             return 1
         
         # Deletar o tópico
-        futures = admin_client.delete_topics([topic_name])
+        try:
+            futures = admin_client.delete_topics([topic_name])
+        except KafkaException as e:
+            print(f'Erro ao iniciar a deleção do tópico "{topic_name}": {e}')
+            return 1
         
         # Aguarde a conclusão da deleção
         for topic, future in futures.items():
@@ -25,18 +36,17 @@ def delete_topic(admin_client, topic_name):
         
         return 0
     except Exception as e:
-        print(f'Erro ao deletar o tópico: {e}')
+        print(f'Erro inesperado ao deletar o tópico: {e}')
         return 1
 
 def main():
     # Configuração do cliente AdminClient
-    admin_client = AdminClient({
-                                'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
-                                'security.protocol': 'SASL_SSL',
-                                'sasl.mechanisms':'PLAIN',
-                                'sasl.username': 'VWIFLOJGPI33ZBOO',
-                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'                                
-                                })
+    try:
+        kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
+        admin_client = AdminClient(kafka_credentials)
+    except (json.JSONDecodeError, KeyError, KafkaException, Exception) as e:
+        logging.error(f"Erro ao configurar o cliente Kafka: {e}")
+        sys.exit(1)
     
     # Configura o parser de argumentos
     parser = argparse.ArgumentParser(description='Deleta um tópico do Kafka.')
