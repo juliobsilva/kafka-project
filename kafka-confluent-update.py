@@ -1,3 +1,6 @@
+import logging
+import json
+import os
 import argparse
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType
@@ -44,36 +47,33 @@ def main():
     topic_name = args.topic_name
     
     # Configuração do cliente Kafka
-    admin_client = AdminClient({
-                                'bootstrap.servers': 'pkc-12576z.us-west2.gcp.confluent.cloud:9092',
-                                'security.protocol': 'SASL_SSL',
-                                'sasl.mechanisms':'PLAIN',
-                                'sasl.username': 'VWIFLOJGPI33ZBOO',
-                                'sasl.password': '+F0MrPFaRvTqaIfKqYhn99x8yKZrM+ZXtvDoM6Tjd6I7qMs/cpqXXbAkMNGTTZlB'                                
-                                })
+    try:
+        kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
+        admin_client = AdminClient(kafka_credentials)
+    except (json.JSONDecodeError, KeyError, KafkaException, Exception) as e:
+        logging.error(f"Erro ao configurar o cliente Kafka: {e}")
+        sys.exit(1)
     
     # Define configurações para serem aplicadas
     config_dicts = {
         'retention.ms': '7200000',
     }
     try:
-        # Define múltiplas configurações
         set_config(admin_client, topic_name, config_dicts)
         
-        # Verifica se as propriedades de configuração foram atualizadas
         for config_name in config_dicts.keys():
             new_value = get_config(admin_client, topic_name, config_name)
             print(f'Now {config_name} for topic {topic_name} is {new_value}')
-
+        
         sys.exit(0)
     except KafkaException as e:
-        print(f"Kafka error occurred: {e}")
+        print(f"Erro do Kafka ocorrido: {e}")
         sys.exit(1)
     except ValueError as e:
-        print(f"Value error occurred: {e}")
+        print(f"Erro de valor ocorrido: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Erro inesperado ocorrido: {e}")
         sys.exit(1)
 
 if __name__ == '__main__':
