@@ -63,7 +63,7 @@ def main():
         
         for config_name in config_dicts.keys():
             new_value = get_config(admin_client, topic_name, config_name)
-            print(f'Now {config_name} for topic {topic_name} is {new_value}')
+            print(f'A nova configuração {config_name} para o tópico {topic_name} é {new_value}')
         
         sys.exit(0)
     except KafkaException as e:
