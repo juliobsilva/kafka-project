@@ -8,16 +8,16 @@ from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, Alte
 from confluent_kafka.error import KafkaException, KafkaError
 
 
-def topic_name_normalized(cost_center, domain, environment, date_type, date_name):
+def topic_name_normalized(cost_center, domain, environment, data_type, data_name):
     # Normaliza os valores de entrada
     domain_normalized = domain.lower()
     environment_normalized = environment.lower()
-    date_type_normalized = date_type.lower()
-    date_name_normalized = date_name.lower()
+    data_type_normalized = data_type.lower()
+    data_name_normalized = data_name.lower()
     cost_center_normalized = cost_center.lower()
 
     # Gera o nome do tópico seguindo o template
-    normalized_kafka_topic_name = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
+    normalized_kafka_topic_name = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}-{data_type_normalized}-{data_name_normalized}'
     
     return normalized_kafka_topic_name
 
