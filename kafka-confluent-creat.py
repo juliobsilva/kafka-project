@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import logging
 import json
 import os
@@ -6,15 +8,16 @@ from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, Alte
 from confluent_kafka.error import KafkaException
 
 
-def topic_name_normalized(domain, environment, date_type, date_name):
+def topic_name_normalized(cost_center, domain, environment, date_type, date_name):
     # Normaliza os valores de entrada
     domain_normalized = domain.lower()
     environment_normalized = environment.lower()
     date_type_normalized = date_type.lower()
     date_name_normalized = date_name.lower()
+    cost_center_normalized = cost_center.lower()
 
     # Gera o nome do tópico seguindo o template
-    normalized_kafka_topic_name = f'{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
+    normalized_kafka_topic_name = f'{cost_center_normalized}-{domain_normalized}-{environment_normalized}-{date_type_normalized}-{date_name_normalized}'
     
     return normalized_kafka_topic_name
 
@@ -28,7 +31,7 @@ def create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, n
     if environment == "PR":
         new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
     else:
-        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=2, replication_factor=3)
+        new_topic = NewTopic(topic=normalized_kafka_topic_name, num_partitions=num_partitions, replication_factor=replication_factor)
 
     try:
         # Verifica se o tópico já existe
@@ -75,11 +78,19 @@ def main():
     environment = os.getenv('ENVIRONMENT', '').strip()
     data_type = os.getenv('DATA_TYPE', '').strip()
     data_name = os.getenv('DATA_NAME', '').strip()
-    retention_ms = os.getenv('RETENTION_MS', 7200000)
-    max_message_bytes = os.getenv('MAX_MESSAGE_BYTES', 1048576)
-    num_partitions = os.getenv('NUM_PARTITIONS', 1)
-    replication_factor = os.getenv('REPLICATION_FACTOR', 1)
+    cost_center = os.getenv('COST_CENTER', '').strip()
+    
+    # Validação dos valores de entrada
+    try:
+        retention_ms = int(os.getenv('RETENTION_MS'))
+        max_message_bytes = int(os.getenv('MAX_MESSAGE_BYTES'))
+        num_partitions = int(os.getenv('NUM_PARTITIONS'))
+        replication_factor = int(os.getenv('REPLICATION_FACTOR'))
+    except ValueError as e:
+        logging.error(f"Erro ao tentar converter os valores de entrada: {e}")
+        sys.exit(1)
 
+    # Configurações padrão
     config_dicts = {
         "retention.ms": "7200000",  
         "max.message.bytes": "1048576"
@@ -87,29 +98,37 @@ def main():
 
     # Configurações específicas para o ambiente de produção
     if environment == "PR":
-        config_dicts["retention.ms"] = int(retention_ms)
-        config_dicts["max.message.bytes"] = int(max_message_bytes)
-        num_partitions = int(num_partitions)
-        replication_factor = int(replication_factor)
-        data_type = data_type
-        data_name = data_name
-
+        config_dicts["retention.ms"] = retention_ms
+        config_dicts["max.message.bytes"] = max_message_bytes
+        if not (2 <= replication_factor <= 3):
+            logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
+            sys.exit(1)
+    else:
+        # Valida número de partições para ambientes não produtivos
+        if not (1 <= num_partitions <= 3):
+            logging.error(f"Número de partições inválido: {num_partitions}. Deve ser no mínimo (1) ou no máximo (3).")
+            sys.exit(1)
+        
+        # Valida fator de replicação para ambientes não produtivos
+        if not (2 <= replication_factor <= 3):
+            logging.error(f"Fator de replicação inválido: {replication_factor}. Deve ser no mínimo (2) ou no máximo (3).")
+            sys.exit(1)
+    
     # Configuração do cliente Kafka
     kafka_credentials = json.loads(os.getenv('KAFKA_CREDENTIALS'))
-    admin_client = AdminClient(kafka_credentials)
-
-    # Verifica se os parâmetros foram informados
-    if all(var not in (None, '', ' ') for var in [domain, environment, data_type, data_name]):
-        normalized_kafka_topic_name = topic_name_normalized(domain, environment, data_type, data_name)
+    admin_client = AdminClient(kafka_credentials) 
+        
+    #Verifica se todos os parâmetros obrigatórios foram informados
+    if not all([cost_center, domain, environment, data_type, data_name]):
+        missing_params = [name for param, name in zip([cost_center, domain, environment, data_type, data_name], ['DOMAIN', 'ENVIRONMENT', 'DATA_TYPE', 'DATA_NAME', 'COST_CENTER']) if not param]
+        logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
+        sys.exit(1)
+    else:
+        normalized_kafka_topic_name = topic_name_normalized(cost_center, domain, environment, data_type, data_name)
         create_result = create_kafka_topic(admin_client, normalized_kafka_topic_name, environment, num_partitions, replication_factor)
-        if create_result == 0:    
+        if create_result == 0:
             set_default_config(admin_client, normalized_kafka_topic_name, config_dicts)
             sys.exit(create_result)
-    else:
-         missing_params = [name for param, name in zip([domain, environment, data_type, data_name],['domain', 'environment', 'data_type', 'data_name']) if param in (None, '', ' ')]
-         if missing_params:
-             logging.error(f"Os seguintes parâmetros não foram informados: {', '.join(missing_params)}")
-             sys.exit(1)
 
 if __name__ == "__main__":
     main()
