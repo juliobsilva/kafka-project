@@ -145,7 +145,7 @@ def main():
                 logging.error(f"Erro ao criar o tópico Kafka: {e}")
                 sys.exit(1)
     
-    except Exception as e:
+    except (Exception, KafkaError) as e:
         logging.error(f"Erro inesperado no main: {e}")
         sys.exit(1)
 
