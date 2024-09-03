@@ -5,7 +5,7 @@ import json
 import os
 import sys
 from confluent_kafka.admin import AdminClient, ConfigResource, ConfigEntry, AlterConfigOpType, NewTopic
-from confluent_kafka.error import KafkaException
+from confluent_kafka.error import KafkaException, KafkaError
 
 
 def topic_name_normalized(cost_center, domain, environment, date_type, date_name):
@@ -145,7 +145,7 @@ def main():
                 logging.error(f"Erro ao criar o tópico Kafka: {e}")
                 sys.exit(1)
     
-    except Exception as e:
+    except (Exception, KafkaError) as e:
         logging.error(f"Erro inesperado no main: {e}")
         sys.exit(1)
 
