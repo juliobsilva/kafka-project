@@ -12,6 +12,8 @@ on:
     
 jobs:
   kafka-topic-update:
+    env:
+      KAFKA_CREDENTIALS: ${{ secrets.KAFKA_CREDENTIALS }}
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
