@@ -3,20 +3,22 @@ name: Triggered by Jira
 on:
   workflow_dispatch:
     inputs:
-      issue_key:
-        description: 'Issue Key'
-        required: true
-      issue_summary:
-        description: 'Issue Summary'
+      payload_base64:
+        description: 'Base64 encoded payload'
         required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Decode Base64 Payload
+        id: decode
+        run: |
+          echo "${{ github.event.inputs.payload_base64 }}" | base64 --decode > payload.json
+          cat payload.json
 
-      - name: Print Issue Info
-        run: echo "Issue Key is ${{ github.event.inputs.issue_key }}"
-        run: echo "Issue Summary is ${{ github.event.inputs.issue_summary }}"
+      - name: Parse JSON
+        id: parse
+        run: |
+          issue_key=$(jq -r '.issue_key' payload.json)
+          issue_summary=$(jq -r '.issue_summary' payload.json)
