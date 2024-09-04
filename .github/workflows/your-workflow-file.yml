@@ -1,0 +1,21 @@
+name: Jira to GitHub
+
+on:
+  workflow_dispatch:
+    inputs:
+      encoded_payload:
+        description: 'Payload codificado em Base64'
+        required: true
+        type: string
+
+jobs:
+  process_jira_payload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Decodificar e processar o payload
+      run: |
+        echo "Decodificando o payload do Jira"
+        decoded_payload=$(echo "${{ github.event.inputs.encoded_payload }}" | base64 --decode)
+        echo "Payload decodificado: $decoded_payload"
+        # Adicione aqui a lógica adicional para processar o payload decodificado
