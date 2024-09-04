@@ -1,0 +1,17 @@
+name: Jira to GitHub
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [jira_event]
+
+jobs:
+  process_jira_payload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Process Jira Payload
+      run: |
+        echo "Received Jira payload"
+        # Aqui você pode chamar um script Python que processa o payload
+        python3 process_payload.py
