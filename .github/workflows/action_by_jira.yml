@@ -1,8 +1,12 @@
 name: Jira to GitHub
 
 on:
-    issues:
-      types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      encoded_payload:
+        description: 'Payload codificado em Base64'
+        required: true
+        type: string
 
 jobs:
   process_jira_payload:
