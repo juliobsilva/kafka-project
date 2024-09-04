@@ -1,0 +1,22 @@
+name: Triggered by Jira
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_key:
+        description: 'Issue Key'
+        required: true
+      issue_summary:
+        description: 'Issue Summary'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Print Issue Info
+        run: echo "Issue Key is ${{ github.event.inputs.issue_key }}"
+        run: echo "Issue Summary is ${{ github.event.inputs.issue_summary }}"
